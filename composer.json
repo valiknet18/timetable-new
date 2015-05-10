@@ -1,0 +1,15 @@
+{
+    "name": "valik-pc/timetable-new",
+    "authors": [
+        {
+            "name": "Valik Grinevich",
+            "email": "valik.v1per@gmail.com"
+        }
+    ],
+    "require": {
+        "silex/silex": "~1.2"
+    },
+    "autoload": {
+        "psr-0": {"Valiknet": "src/"}
+    }
+}
