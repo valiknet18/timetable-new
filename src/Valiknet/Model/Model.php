@@ -1,4 +1,4 @@
-<?php
+<?hh
 
 namespace Valiknet\Model;
 
@@ -21,7 +21,7 @@ class Model implements InterfaceModel
         return $this->pdo;
     }
 
-    public static function findOne(string $sql, Pair $parameters)
+    public static function findOne(string $sql, $parameters)
     {
         $findOne = self::getPdo()->prepare($sql);
         $result = $findOne->execute(array($parameters[0], $parameters[1]));
@@ -29,7 +29,7 @@ class Model implements InterfaceModel
         return $result;
     }
 
-    public static function find(string $sql, Pair $pair)
+    public static function find(string $sql, $pair)
     {
         $find = self::getPdo()->prepare($sql);
         $result = $find->execute(array($pair[0], $pair[1]));
