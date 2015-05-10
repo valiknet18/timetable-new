@@ -8,8 +8,25 @@
 
 namespace Valiknet\Model;
 
-
-class Events extends AbstractModel
+class Events extends Model implements InterfaceObject
 {
+    public function save()
+    {
 
-} 
+    }
+
+    public static function findBy()
+    {
+
+    }
+
+    public static function findOneBy()
+    {
+
+    }
+
+    public function create()
+    {
+
+    }
+}
