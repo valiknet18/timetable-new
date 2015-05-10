@@ -4,7 +4,7 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "72535b81e86c9c22872fd1da64a7b8fa",
+    "hash": "3a55016ccf00436d544f4cd6b5a6f3dd",
     "packages": [
         {
             "name": "pimple/pimple",
@@ -492,12 +492,121 @@
                 "url"
             ],
             "time": "2015-03-30 15:54:10"
+        },
+        {
+            "name": "symfony/yaml",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/symfony/Yaml.git",
+                "reference": "70d4fb2d28a8cef5472b934ee64459f18d99ca5d"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/symfony/Yaml/zipball/70d4fb2d28a8cef5472b934ee64459f18d99ca5d",
+                "reference": "70d4fb2d28a8cef5472b934ee64459f18d99ca5d",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.5.9"
+            },
+            "require-dev": {
+                "symfony/phpunit-bridge": "~2.8|~3.0"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "3.0-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Symfony\\Component\\Yaml\\": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Symfony Community",
+                    "homepage": "http://symfony.com/contributors"
+                },
+                {
+                    "name": "Fabien Potencier",
+                    "email": "fabien@symfony.com"
+                }
+            ],
+            "description": "Symfony Yaml Component",
+            "homepage": "http://symfony.com",
+            "time": "2015-04-24 07:12:41"
+        },
+        {
+            "name": "twig/twig",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/twigphp/Twig.git",
+                "reference": "34e943ae7cca8f9aff666fb87c3e6860e18fc138"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/twigphp/Twig/zipball/34e943ae7cca8f9aff666fb87c3e6860e18fc138",
+                "reference": "34e943ae7cca8f9aff666fb87c3e6860e18fc138",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.5.0"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "2.0-dev"
+                }
+            },
+            "autoload": {
+                "psr-0": {
+                    "Twig_": "lib/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Fabien Potencier",
+                    "email": "fabien@symfony.com",
+                    "homepage": "http://fabien.potencier.org",
+                    "role": "Lead Developer"
+                },
+                {
+                    "name": "Armin Ronacher",
+                    "email": "armin.ronacher@active-4.com",
+                    "role": "Project Founder"
+                },
+                {
+                    "name": "Twig Team",
+                    "homepage": "http://twig.sensiolabs.org/contributors",
+                    "role": "Contributors"
+                }
+            ],
+            "description": "Twig, the flexible, fast, and secure template language for PHP",
+            "homepage": "http://twig.sensiolabs.org",
+            "keywords": [
+                "templating"
+            ],
+            "time": "2015-03-17 06:32:29"
         }
     ],
     "packages-dev": [],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": [],
+    "stability-flags": {
+        "symfony/yaml": 20,
+        "twig/twig": 20
+    },
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": [],
