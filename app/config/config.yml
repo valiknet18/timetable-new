@@ -1,7 +1,5 @@
-config:
-  database:
-    host: 127.0.0.1
-    post: 5471
-    username: postgres
-    password: *
-    database_name: timetable
+database:
+  host: 127.0.0.1:5471
+  username: postgres
+  password: *
+  database_name: timetable
