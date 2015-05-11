@@ -1,17 +1,20 @@
-<?hh
+<?php
 
 namespace Valiknet\Model;
 
 use Silex\Application;
+use Symfony\Component\Yaml\Yaml;
 
 class Model implements InterfaceModel
 {
-    protected PDO $pdo;
+    protected $pdo;
 
-    public function __construct(Application $app)
+    public function __construct()
     {
-        $dsn = sprintf('pgsql:host=%s;dbname=%s', $app['config']['database']['host'], $app['config']['database']['database_name']);
-        $this->pdo = new \PDO($dsn, $app['config']['database']['username'], $app['config']['database']['password']);
+        $data = Yaml::parse(file_get_contents(__DIR__ . "/../../../app/config/config.yml"));
+
+        $dsn = sprintf('pgsql:host=%s;dbname=%s', $data['database']['host'], $data['database']['database_name']);
+        $this->pdo = new \PDO($dsn, $data['database']['username'], $data['database']['password']);
         $this->pdo->setAttribute( \PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION );
         $this->pdo->exec("SET CHARACTER SET utf8");
     }
@@ -21,7 +24,7 @@ class Model implements InterfaceModel
         return $this->pdo;
     }
 
-    public static function findOne(string $sql, $parameters)
+    public static function findOne($sql, array $parameters)
     {
         $findOne = self::getPdo()->prepare($sql);
         $result = $findOne->execute(array($parameters[0], $parameters[1]));
@@ -29,7 +32,7 @@ class Model implements InterfaceModel
         return $result;
     }
 
-    public static function find(string $sql, $pair)
+    public static function find($sql, array $pair)
     {
         $find = self::getPdo()->prepare($sql);
         $result = $find->execute(array($pair[0], $pair[1]));

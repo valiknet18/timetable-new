@@ -1,4 +1,4 @@
-<?hh
+<?php
 
 namespace Valiknet\Model;
 
@@ -6,11 +6,11 @@ interface InterfaceObject
 {
     public function save();
 
-    public static function findBy($pair): T;
+    public static function findBy(array $pair);
 
-    public static function findOneBy($pair): T;
+    public static function findOneBy(array $pair);
 
     public function create();
 
-    public static function mappedObject(array $attributes): T;
+    public function mappedObject(array $attributes);
 }

@@ -1,4 +1,4 @@
-<?hh
+<?php
 /**
  * Created by PhpStorm.
  * User: valik-pc
@@ -10,43 +10,46 @@ namespace Valiknet\Model;
 
 class Auditory extends Model implements InterfaceObject
 {
-    public string $table_name = 'auditories';
-    public int $auditory_number;
-    public int $auditory_type;
+    public $table_name = 'auditories';
+    public $auditory_number;
+    public $auditory_type;
 
-    public static function findOneBy($pair): Auditories
+    public static function findOneBy(array $pair)
     {
         $sql = "SELECT * FROM auditories WHERE ? = ? LIMIT 1";
 
         $result = self::findOne($sql, $pair);
 
-        $this->mappedObject($result);
+        self::mappedObject($result);
 
-        return $this;
+        return self;
     }
 
-    public static function findBy($pair): Vector
+    public static function findBy(array $pair)
     {
         $sql = "SELECT * FROM auditories WHERE ? = ?";
 
         $resultQuery = self::find($sql, $pair);
 
-        $result = Vector {};
-
-        return $result;
+        return $resultQuery;
     }
 
-    public static function mappedObject(array $data): Auditory
+    public function mappedObject(array $data)
     {
         $this->auditory_number = $data['auditory_number'];
         $this->auditory_type = $data['auditory_type'];
 
-        return $this;
+        return this;
     }
 
-    public function save(): void
+    public function save()
     {
         $save = $this->getPdo()->prepare('UPDATE auditories SET auditory_number = ?, auditory_type = ?');
         $save->execute(array($this->auditory_number, $this->auditory_type));
+    }
+
+    public function create()
+    {
+
     }
 }
