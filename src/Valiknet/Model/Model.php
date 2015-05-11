@@ -2,7 +2,6 @@
 
 namespace Valiknet\Model;
 
-use Silex\Application;
 use Symfony\Component\Yaml\Yaml;
 
 class Model implements InterfaceModel

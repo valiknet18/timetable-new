@@ -5,7 +5,6 @@ namespace Valiknet\Controller;
 use Silex\Application;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Yaml\Yaml;
 
 class EventsController extends AbstractController
 {
