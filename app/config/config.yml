@@ -1,5 +1,5 @@
 database:
-  host: 127.0.0.1:5471
-  username: postgres
-  password: ~
+  host: 192.168.33.10
+  username: root
+  password: root
   database_name: timetable
