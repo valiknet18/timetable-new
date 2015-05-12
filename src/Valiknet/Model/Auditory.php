@@ -13,10 +13,11 @@ class Auditory extends Model implements InterfaceObject
     public $table_name = 'auditories';
     public $auditory_number;
     public $auditory_type;
+    public $events = [];
 
     public static function findOneBy(array $pair)
     {
-        $sql = "SELECT * FROM auditories WHERE ? = ? LIMIT 1";
+        $sql = "SELECT * FROM auditories INNER JOIN events ON auditories.auditory_number = events.auditory_number WHERE ? = ? LIMIT 1";
 
         $result = self::findOne($sql, $pair);
 
@@ -27,7 +28,7 @@ class Auditory extends Model implements InterfaceObject
 
     public static function findBy(array $pair)
     {
-        $sql = "SELECT * FROM auditories WHERE ? = ?";
+        $sql = "SELECT * FROM auditories INNER JOIN events ON auditories.auditory_number = events.auditory_number WHERE ? = ?";
 
         $resultQuery = self::find($sql, $pair);
 
@@ -39,7 +40,7 @@ class Auditory extends Model implements InterfaceObject
         $this->auditory_number = $data['auditory_number'];
         $this->auditory_type = $data['auditory_type'];
 
-        return this;
+        return $this;
     }
 
     public function save()
@@ -50,6 +51,8 @@ class Auditory extends Model implements InterfaceObject
 
     public function create()
     {
-
+        $sql = "INSERT INTO auditories(auditory_number, auditory_type) VALUES(?, ?)";
+        $create = $this->getPdo()->prepare($sql);
+        $create->execute(array($this->auditory_number, $this->auditory_type));
     }
 }

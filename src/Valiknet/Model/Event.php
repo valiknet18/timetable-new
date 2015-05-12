@@ -4,6 +4,7 @@ namespace Valiknet\Model;
 
 class Event extends Model implements InterfaceObject
 {
+    public $event_code;
     public $event_date_start;
     public $event_date_end;
     public $event_time_start;

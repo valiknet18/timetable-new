@@ -15,12 +15,19 @@ class Model implements InterfaceModel
         $dsn = sprintf('pgsql:host=%s;dbname=%s', $data['database']['host'], $data['database']['database_name']);
         $this->pdo = new \PDO($dsn, $data['database']['username'], $data['database']['password']);
         $this->pdo->setAttribute( \PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION );
-        $this->pdo->exec("SET CHARACTER SET utf8");
+        $this->pdo->exec("SET CLIENT_ENCODING TO 'UTF8';");
     }
 
     public function getPdo()
     {
         return $this->pdo;
+    }
+
+    public static function getStaticPdo()
+    {
+        $model = new Model();
+
+        return $model->getPdo();
     }
 
     public static function findOne($sql, array $parameters)
@@ -35,6 +42,14 @@ class Model implements InterfaceModel
     {
         $find = self::getPdo()->prepare($sql);
         $result = $find->execute(array($pair[0], $pair[1]));
+
+        return $result;
+    }
+
+    public static function exec($sql, array $parameters = [])
+    {
+        $query = self::getStaticPdo()->prepare($sql);
+        $result = $query->execute($parameters);
 
         return $result;
     }
