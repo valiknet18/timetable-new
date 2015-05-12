@@ -9,6 +9,8 @@ DROP TABLE Groups;
 DROP TABLE Teachers;
 DROP TABLE Subjects;
 DROP TABLE Auditories;
+DROP TABLE Exceptions;
+DROP TABLE Repeats;
 
 DROP DOMAIN event_date_not_null;
 DROP DOMAIN event_time_not_null;

@@ -13,15 +13,6 @@ CREATE TABLE Events(
     event_time_start event_time_not_null,
     event_time_end event_time_not_null,
 
-    event_replace_date_start event_date_nullable,
-    event_replace_date_end event_date_nullable,
-    event_replace_time_start event_time_nullable,
-    event_replace_time_end event_time_nullable,
-
-    event_type SMALLINT NOT NULL,
-
-    repeat_type CHAR(15) NOT NULL DEFAULT('single'),
-
     teacher_code domain_integer_not_null,
     subject_code domain_integer_not_null,
     auditory_number domain_integer_not_null,
@@ -29,11 +20,18 @@ CREATE TABLE Events(
     PRIMARY KEY(event_code)
 );
 
+CREATE TABLE Exceptions(
+    event_replace_date_start event_date_nullable,
+    event_replace_date_end event_date_nullable,
+    event_replace_time_start event_time_nullable,
+    event_replace_time_end event_time_nullable,
+) INHERITS(Events)
+
 CREATE TABLE Lessons(
   lesson_code serial,
 
-  event_date_start date NOT NULL,
-  event_date_end date NOT NULL,
+  event_time_start event_time_not_null,
+  event_time_end event_time_not_null,
 
   original_event_code domain_integer_not_null,
   teacher_code domain_integer_not_null,
@@ -82,22 +80,26 @@ CREATE TABLE Auditories(
     PRIMARY KEY(auditory_number)
 );
 
+CREATE TABLE Repeats(
+      repeat_type CHAR(15) NOT NULL DEFAULT('single'),
+) INHERITS (Events)
+
 CREATE TABLE Everyday(
   repeat_type CHAR(15) NOT NULL DEFAULT('everyday'),
   everyDay smallint_not_null_domain
-) INHERITS (Events);
+) INHERITS (Repeat);
 
 CREATE TABLE Everyweek(
   repeat_type CHAR(15) NOT NULL DEFAULT('everyweek'),
   everyDay BIT(7) NOT NULL,
   everyWeek smallint_not_null_domain
-) INHERITS (Events);
+) INHERITS (Repeat);
 
 CREATE TABLE Everymonth(
   repeat_type CHAR(15) NOT NULL DEFAULT('everymonth'),
   repeatedAt smallint_not_null_domain,
   everyMonth smallint_not_null_domain
-) INHERITS (Events);
+) INHERITS (Repeat);
 
 ALTER TABLE Events ADD CONSTRAINT event_fg_key_to_teacher FOREIGN KEY (teacher_code) REFERENCES Teachers;
 ALTER TABLE Events ADD CONSTRAINT event_fg_key_to_subject FOREIGN KEY (subject_code) REFERENCES Subjects;
