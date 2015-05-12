@@ -5,14 +5,15 @@ namespace Valiknet\Controller;
 use Silex\Application;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Valiknet\Model\Group;
 use Valiknet\Model\Model;
 
-class EventsController extends AbstractController
+class GroupsController extends AbstractController
 {
     public function indexAction(Application $app, Request $request)
     {
-//        $pdo = Model::exec("SELECT get_event_by_day()");
+        $groups = Group::findBy();
 
-        return $app['twig']->render('events/index.html.twig');
+        return $app['twig']->render('groups/index.html.twig', ['groups' => $groups]);
     }
 }
