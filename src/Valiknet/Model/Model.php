@@ -38,12 +38,17 @@ class Model implements InterfaceModel
         return $result;
     }
 
-    public static function find($sql, array $pair)
+    public static function find($sql, array $pair = [])
     {
-        $find = self::getPdo()->prepare($sql);
-        $result = $find->execute(array($pair[0], $pair[1]));
+        if (count($pair) > 0) {
+            $find = self::getStaticPdo()->prepare($sql);
+            $find->execute(array($pair[0], $pair[1]));
+        } else {
+            $find = self::getStaticPdo()->prepare($sql);
+            $find->execute();
+        }
 
-        return $result;
+        return $find->fetchAll();
     }
 
     public static function exec($sql, array $parameters = [])

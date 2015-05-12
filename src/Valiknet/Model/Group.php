@@ -17,18 +17,14 @@ class Group extends Model implements InterfaceObject
     public static function findBy(array $pair = [])
     {
         if (count($pair) > 0) {
-            $groups = self::getStaticPdo()->prepare('SELECT * FROM groups WHERE ? = ?');
-            $groups->execute([$pair[0], $pair[1]]);
+            $groups = self::find('SELECT * FROM groups WHERE ? = ?', $pair);
         } else {
-            $groups = self::getStaticPdo()->prepare('SELECT * FROM groups');
-            $groups->execute();
+            $groups = self::find('SELECT * FROM groups');
         }
-
-        $data = $groups->fetchAll();
 
         $result = [];
 
-        foreach ($data as $key => $value) {
+        foreach ($groups as $key => $value) {
             $group = new Group();
             $group->mappedObject($value);
 

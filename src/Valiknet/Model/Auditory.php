@@ -28,11 +28,24 @@ class Auditory extends Model implements InterfaceObject
 
     public static function findBy(array $pair)
     {
-        $sql = "SELECT * FROM auditories INNER JOIN events ON auditories.auditory_number = events.auditory_number WHERE ? = ?";
+        if (count($pair) > 0) {
+            $sql = "SELECT * FROM auditories INNER JOIN events ON auditories.auditory_number = events.auditory_number WHERE ? = ?";
+            $auditories = self::find($sql, $pair);
+        } else {
+            $sql = "SELECT * FROM auditories INNER JOIN events ON auditories.auditory_number = events.auditory_number";
+            $auditories = self::find($sql);
+        }
 
-        $resultQuery = self::find($sql, $pair);
+        $result = [];
 
-        return $resultQuery;
+        foreach ($auditories as $key => $value) {
+            $auditory = new Auditory();
+            $auditory->mappedObject($value);
+
+            $result[] = $auditory;
+        }
+
+        return $result;
     }
 
     public function mappedObject(array $data)
