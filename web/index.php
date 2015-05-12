@@ -1,4 +1,5 @@
 <?php
+error_reporting(-1);
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Yaml\Yaml;
