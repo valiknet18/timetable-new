@@ -2,6 +2,17 @@ INSERT INTO auditories(auditory_number, auditory_type) VALUES (130, 0);
 INSERT INTO auditories(auditory_number, auditory_type) VALUES (129, 0);
 INSERT INTO auditories(auditory_number, auditory_type) VALUES (127, 0);
 
+INSERT INTO subjects(subject_name) VALUES('Організація баз данных');
+INSERT INTO subjects(subject_name) VALUES('Web-програмування та web-дизайн');
+INSERT INTO subjects(subject_name) VALUES('ЧМІ');
+
+INSERT INTO teachers(teacher_name, teacher_surname, teacher_last_name, teacher_phone) VALUES('Юрій', 'Яриніч', 'Олегович', '0680000000');
+INSERT INTO teachers(teacher_name, teacher_surname, teacher_last_name, teacher_phone) VALUES('Артем', 'Авраменко', 'Сергійович', '0680000000');
+INSERT INTO teachers(teacher_name, teacher_surname, teacher_last_name, teacher_phone) VALUES('Юлія', 'Гребенович', 'Євгенівна', '0680000000');
+
+INSERT INTO teacher_subject(teacher_code, subject_code) VALUES(1, 1);
+INSERT INTO teacher_subject(teacher_code, subject_code) VALUES(2, 2);
+INSERT INTO teacher_subject(teacher_code, subject_code) VALUES(3, 3);
 
 INSERT INTO everyday(event_date_start, event_date_end, event_time_start, event_time_end, event_type, teacher_code, subject_code, auditory_number, everyday)
 VALUES('2015-04-25', '2015-05-03', '08:00:00', '10:00:00', 0, 1, 1, 130, 3);
@@ -31,15 +42,3 @@ INSERT INTO groups(group_name, group_course, group_students_count) VALUES('КЕ-
 INSERT INTO groups(group_name, group_course, group_students_count) VALUES('КМ-12', 3, 12);
 INSERT INTO groups(group_name, group_course, group_students_count) VALUES('КІ-12', 3, 15);
 INSERT INTO groups(group_name, group_course, group_students_count) VALUES('КС-12', 3, 15);
-
-INSERT INTO subjects(subject_name) VALUES('Організація баз данных');
-INSERT INTO subjects(subject_name) VALUES('Web-програмування та web-дизайн');
-INSERT INTO subjects(subject_name) VALUES('ЧМІ');
-
-INSERT INTO teachers(teacher_name, teacher_surname, teacher_last_name, teacher_phone) VALUES('Юрій', 'Яриніч', 'Олегович', '0680000000');
-INSERT INTO teachers(teacher_name, teacher_surname, teacher_last_name, teacher_phone) VALUES('Артем', 'Авраменко', 'Сергійович', '0680000000');
-INSERT INTO teachers(teacher_name, teacher_surname, teacher_last_name, teacher_phone) VALUES('Юлія', 'Гребенович', 'Євгенівна', '0680000000');
-
-INSERT INTO teacher_subject(teacher_code, subject_code) VALUES(1, 1);
-INSERT INTO teacher_subject(teacher_code, subject_code) VALUES(2, 2);
-INSERT INTO teacher_subject(teacher_code, subject_code) VALUES(3, 3);

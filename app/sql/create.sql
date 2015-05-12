@@ -96,7 +96,7 @@ CREATE TABLE Everyweek(
 CREATE TABLE Everymonth(
   repeat_type CHAR(15) NOT NULL DEFAULT('everymonth'),
   repeatedAt smallint_not_null_domain,
-  everyWeek smallint_not_null_domain
+  everyMonth smallint_not_null_domain
 ) INHERITS (Events);
 
 ALTER TABLE Events ADD CONSTRAINT event_fg_key_to_teacher FOREIGN KEY (teacher_code) REFERENCES Teachers;
