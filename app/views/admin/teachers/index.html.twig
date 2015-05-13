@@ -1,5 +1,43 @@
 {% extends 'admin/admin.html.twig' %}
 
 {% block content %}
-    Teachers index page
+    <div>
+    <h3></h3>
+
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th>Прізвище</th>
+                <th>Ім’я</th>
+                <th>По-батькові</th>
+                <th>Номер телефону</th>
+                <th>Посилання</th>
+            </tr>
+            </thead>
+
+            {% for teacher in teachers %}
+            <tr>
+                <td>
+                    {{teacher.teacher_surname}}
+                </td>
+
+                <td>
+                    {{teacher.teacher_name}}
+                </td>
+
+                <td>
+                    {{teacher.teacher_last_name}}
+                </td>
+
+                <td>
+                    {{teacher.teacher_phone}}
+                </td>
+
+                <td>
+                    link
+                </td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
 {% endblock %}

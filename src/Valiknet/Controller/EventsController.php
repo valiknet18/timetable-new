@@ -11,8 +11,6 @@ class EventsController extends AbstractController
 {
     public function indexAction(Application $app, Request $request)
     {
-//        $pdo = Model::exec("SELECT get_event_by_day()");
-
         return $app['twig']->render('events/index.html.twig');
     }
 }

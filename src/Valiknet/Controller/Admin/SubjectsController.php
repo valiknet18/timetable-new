@@ -7,11 +7,14 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Valiknet\Controller\AbstractController;
 use Valiknet\Model\Model;
+use Valiknet\Model\Subject;
 
 class SubjectsController extends AbstractController
 {
     public function indexAction(Application $app, Request $request)
     {
-        return $app['twig']->render('admin/subjects/index.html.twig');
+        $subjects = Subject::findBy();
+
+        return $app['twig']->render('admin/subjects/index.html.twig', ['subjects' => $subjects]);
     }
 }
