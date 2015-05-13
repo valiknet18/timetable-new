@@ -1,5 +1,23 @@
 {% extends 'app.html.twig' %}
 
 {% block content %}
-    Subjects index page
+    <div>
+    <h3></h3>
+
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th>Назва предмета</th>
+            <th>Викладачі</th>
+        </tr>
+        </thead>
+
+        {% for subject in subjects %}
+        <tr>
+            <td>{{subject.subject_name}}</td>
+            <td>Викладач 1, Викладач 2</td>
+        </tr>
+        {% endfor %}
+    </table>
+    </div>
 {% endblock %}
