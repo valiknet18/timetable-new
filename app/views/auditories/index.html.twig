@@ -1,5 +1,23 @@
 {% extends 'app.html.twig' %}
 
 {% block content %}
-    Auditories index page
+    <div>
+        <h3></h3>
+
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th>Номер аудиторії</th>
+                <th>Тип аудиторії</th>
+            </tr>
+            </thead>
+
+            {% for auditory in auditories %}
+                <tr>
+                    <td>{{auditory.auditory_number}}</td>
+                    <td>{{auditory.auditory_type}}</td>
+                </tr>
+            {% endfor %}
+        </table>
+    </div>
 {% endblock %}

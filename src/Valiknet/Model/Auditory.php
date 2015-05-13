@@ -26,13 +26,13 @@ class Auditory extends Model implements InterfaceObject
         return self;
     }
 
-    public static function findBy(array $pair)
+    public static function findBy(array $pair = [])
     {
         if (count($pair) > 0) {
             $sql = "SELECT * FROM auditories INNER JOIN events ON auditories.auditory_number = events.auditory_number WHERE ? = ?";
             $auditories = self::find($sql, $pair);
         } else {
-            $sql = "SELECT * FROM auditories INNER JOIN events ON auditories.auditory_number = events.auditory_number";
+            $sql = "SELECT auditories.*, COUNT(events.event_code) AS count_ev FROM auditories LEFT JOIN events ON events.auditory_number = auditories.auditory_number GROUP BY auditories.auditory_number";
             $auditories = self::find($sql);
         }
 
