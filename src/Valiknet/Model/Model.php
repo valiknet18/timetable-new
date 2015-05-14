@@ -63,8 +63,6 @@ class Model implements InterfaceModel
     {
         $reflection = new \ReflectionClass(get_class($this));
 
-        $primary_key = null;
-
         foreach ($reflection->getProperties() as $property) {
             $doc_block = $property->getDocComment();
 
@@ -75,10 +73,6 @@ class Model implements InterfaceModel
                     case "property":
                         preg_match_all('#@key\((.*?)\)\n#s', $doc_block, $key);
 
-                        if ($key[1][0]) {
-                            $primary_key = $property->getName();
-                        }
-
                         $property->setValue($this, $data[$property->getName()]);
                         break;
 
@@ -86,7 +80,7 @@ class Model implements InterfaceModel
                         if ($depth < 2) {
                             preg_match_all('#@typeObject\(\'(.*?)\'\)\n#s', $doc_block, $nameObject);
 
-                            $objectData = $this->getData($reflection, $property->getName(), $data[$primary_key]);
+                            $objectData = $this->getData($property->getName());
 
                             $property->setValue($this, $this->generateArraysOfObjects($nameObject[1][0], $objectData, ++$depth));
                         }
@@ -96,7 +90,15 @@ class Model implements InterfaceModel
                         if ($depth < 2) {
                             preg_match_all('#@typeObject\(\'(.*?)\'\)\n#s', $doc_block, $nameObject);
 
-                            $objectData = $this->getData($reflection, $property->getName(), $data[$primary_key]);
+                            $objectData = $this->getData($property->getName());
+
+                            $object = new $nameObject[1][0]();
+
+                            if ($objectData) {
+                                $object->mappedObject($objectData, ++$depth);
+                            }
+
+                            $property->setValue($this, $object);
                         }
                         break;
                 }
@@ -104,20 +106,20 @@ class Model implements InterfaceModel
         }
     }
 
-    private function getData(\ReflectionClass $reflection, $property, $key)
+    private function getData($property)
     {
-        $result = call_user_func(array($reflection->getName(), $property), $key);
+        $result = $this->{$property}();
 
         return $result;
     }
 
-    private function generateArraysOfObjects($nameClass, $data, $path) {
+    private function generateArraysOfObjects($nameClass, $data, $depth) {
 
         $objects = [];
 
         foreach ($data as $element) {
             $object = new $nameClass();
-            $object->mappedObject($element, $path);
+            $object->mappedObject($element, $depth);
 
             $objects[] = $object;
         }

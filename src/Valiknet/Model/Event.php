@@ -64,11 +64,11 @@ class Event extends Model implements InterfaceObject
      */
     public $groups = [];
 
-    public static function groups($event_code)
+    public function groups()
     {
         $sql = "SELECT * FROM event_group LEFT JOIN groups ON groups.group_code = event_group.group_code WHERE event_group.event_code = ?";
 
-        $groups = self::find($sql, $event_code);
+        $groups = self::find($sql, $this->event_code);
 
         return $groups;
     }
@@ -78,12 +78,12 @@ class Event extends Model implements InterfaceObject
 
     }
 
-    public static function subject()
+    public function subject()
     {
 
     }
 
-    public static function teacher()
+    public function teacher()
     {
 
     }

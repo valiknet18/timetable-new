@@ -32,11 +32,11 @@ class Auditory extends Model implements InterfaceObject
      */
     public $events = [];
 
-    public static function events($auditory_number)
+    public function events()
     {
         $sql = "SELECT repeats.* FROM repeats WHERE repeats.auditory_number = ?";
 
-        $resultEvents = self::find($sql, $auditory_number);
+        $resultEvents = self::find($sql, $this->auditory_number);
 
         return $resultEvents;
     }

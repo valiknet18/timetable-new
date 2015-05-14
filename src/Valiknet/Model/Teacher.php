@@ -44,17 +44,6 @@ class Teacher extends Model implements InterfaceObject
         return $result;
     }
 
-    public function mappedObject(array $data)
-    {
-        $this->teacher_code = $data['teacher_code'];
-        $this->teacher_last_name = $data['teacher_last_name'];
-        $this->teacher_name = $data['teacher_name'];
-        $this->teacher_phone = $data['teacher_phone'];
-        $this->teacher_surname = $data['teacher_surname'];
-
-        return $this;
-    }
-
     public function save()
     {
         $save = $this->getPdo()->prepare('UPDATE auditories SET auditory_number = ?, auditory_type = ?');
