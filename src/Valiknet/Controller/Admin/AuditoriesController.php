@@ -29,6 +29,8 @@ class AuditoriesController extends AbstractController
         $auditory->auditory_number = $request->request->get('auditory_number');
         $auditory->auditory_type = $request->request->get('auditory_type');
 
-        return $app->redirect($app->path('list_auditories_admin'));
+        $auditory->create();
+
+        return $app->redirect($app['url_generator']->generate('list_auditories_admin'));
     }
 }
