@@ -10,19 +10,45 @@ namespace Valiknet\Model;
 
 class Auditory extends Model implements InterfaceObject
 {
+    /**
+     * @typeProperty('table_name')
+     */
     public $table_name = 'auditories';
-    public $auditory_number;
-    public $auditory_type;
+
+    /**
+     * @typeProperty('property')
+     * @key(true)
+     */
+    public $auditory_number = null;
+
+    /**
+     * @typeProperty('property')
+     */
+    public $auditory_type = null;
+
+    /**
+     * @typeProperty('arrayOfObjects')
+     * @typeObject('Valiknet\Model\Event')
+     */
     public $events = [];
+
+    public static function events($auditory_number)
+    {
+        $sql = "SELECT repeats.* FROM repeats WHERE repeats.auditory_number = ?";
+
+        $resultEvents = self::find($sql, $auditory_number);
+
+        return $resultEvents;
+    }
 
     public static function findOneBy(array $pair)
     {
-        $sql = "SELECT * FROM auditories LEFT JOIN events ON auditories.auditory_number = events.auditory_number WHERE auditories.auditory_number = ? LIMIT 1";
+        $sql = "SELECT auditories.* FROM auditories WHERE auditories.auditory_number = ?";
 
-        $result = self::findOne($sql, $pair['auditory_number']);
+        $resultAuditory = self::findOne($sql, $pair['auditory_number']);
 
         $auditory = new Auditory();
-        $auditory->mappedObject($result);
+        $auditory->mappedObject($resultAuditory);
 
         return $auditory;
     }
@@ -47,14 +73,6 @@ class Auditory extends Model implements InterfaceObject
         }
 
         return $result;
-    }
-
-    public function mappedObject(array $data)
-    {
-        $this->auditory_number = $data['auditory_number'];
-        $this->auditory_type = $data['auditory_type'];
-
-        return $this;
     }
 
     public function save()
