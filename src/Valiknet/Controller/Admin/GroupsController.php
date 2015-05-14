@@ -4,7 +4,6 @@ namespace Valiknet\Controller\Admin;
 
 use Silex\Application;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
 use Valiknet\Controller\AbstractController;
 use Valiknet\Model\Group;
 use Valiknet\Model\Model;
