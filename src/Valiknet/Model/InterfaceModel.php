@@ -6,5 +6,5 @@ interface InterfaceModel
 {
     public static function findOne($sql, $pair);
 
-    public static function find($sql, array $pair);
+    public static function find($sql, $pair);
 }

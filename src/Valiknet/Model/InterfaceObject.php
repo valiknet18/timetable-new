@@ -12,5 +12,5 @@ interface InterfaceObject
 
     public function create();
 
-    public function mappedObject(array $attributes);
+//    public function mappedObject(array $attributes, $depth = 0);
 }
