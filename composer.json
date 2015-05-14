@@ -9,7 +9,8 @@
     "require": {
         "silex/silex": "~1.2",
         "symfony/yaml": "3.0.*@dev",
-        "twig/twig": "2.0.*@dev"
+        "twig/twig": "2.0.*@dev",
+        "symfony/form": "^2.6"
     },
     "autoload": {
         "psr-0": {"Valiknet": "src/"}
