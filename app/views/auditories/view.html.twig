@@ -7,9 +7,42 @@
         </div>
 
         <div>
+            Тип аудиторії: {{ auditory.auditory_type }}
+        </div>
+
+        <div>
             <h3>Події які будуть відбуваються в цій аудиторії</h3>
             <div>
+                <table class="table table-striped">
+                    <thead>
+                    <tr>
+                        <th>Дата початку</th>
+                        <th>Дата кінця</th>
+                        <th>Час початку</th>
+                        <th>Час кінця</th>
+                        <th>Повторення</th>
+                        <th>Група(и)</th>
+                        <th>Предмет</th>
+                        <th>Викладач</th>
+                        <th>Тип</th>
+                    </tr>
+                    </thead>
 
+
+                    {% for event in auditory.events %}
+                        <tr>
+                            <td>{{ event.event_date_start }}</td>
+                            <td>{{ event.event_date_end }}</td>
+                            <td>{{ event.event_time_start }}</td>
+                            <td>{{ event.event_time_end }}</td>
+                            <td>undefined</td>
+                            <td>Groups</td>
+                            <td>Subject</td>
+                            <td>Teacher</td>
+                            <td>{{ event.event_type }}</td>
+                        </tr>
+                    {% endfor %}
+                </table>
             </div>
         </div>
     </div>

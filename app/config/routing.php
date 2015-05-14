@@ -32,7 +32,8 @@ $app->get('/admin/subjects', 'Valiknet\Controller\Admin\SubjectsController::inde
 //Auditories
 $app->get('/admin/auditories', 'Valiknet\Controller\Admin\AuditoriesController::indexAction')
     ->bind('list_auditories_admin');
-$app->get('/admin/auditories/new', 'Valiknet\Controller\Admin\AuditoriesController::createAction');
+$app->get('/admin/auditories/new', 'Valiknet\Controller\Admin\AuditoriesController::createAction')
+    ->bind('create_auditory');
 $app->post('/admin/auditories/store', 'Valiknet\Controller\Admin\AuditoriesController::storeAction')
     ->bind('store_auditory');
 
