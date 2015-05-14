@@ -2,7 +2,7 @@
 
 namespace Valiknet\Model;
 
-class Everymonth extends Event implements InterfaceObject
+class Everyweek extends Event implements InterfaceObject
 {
     public $everyday;
     public $everyweek;

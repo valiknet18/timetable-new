@@ -17,13 +17,14 @@ class Auditory extends Model implements InterfaceObject
 
     public static function findOneBy(array $pair)
     {
-        $sql = "SELECT * FROM auditories INNER JOIN events ON auditories.auditory_number = events.auditory_number WHERE ? = ? LIMIT 1";
+        $sql = "SELECT * FROM auditories LEFT JOIN events ON auditories.auditory_number = events.auditory_number WHERE auditories.auditory_number = ? LIMIT 1";
 
-        $result = self::findOne($sql, $pair);
+        $result = self::findOne($sql, $pair['auditory_number']);
 
-        self::mappedObject($result);
+        $auditory = new Auditory();
+        $auditory->mappedObject($result);
 
-        return self;
+        return $auditory;
     }
 
     public static function findBy(array $pair = [])
