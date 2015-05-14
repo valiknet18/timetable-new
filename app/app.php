@@ -1,7 +1,5 @@
 <?php
 
-$app->register(new Silex\Provider\FormServiceProvider());
-
 $app->register(new Silex\Provider\UrlGeneratorServiceProvider());
 
 $app->register(new Silex\Provider\TwigServiceProvider(), array(
@@ -14,5 +12,12 @@ $app->register(new Silex\Provider\TwigServiceProvider(), array(
 ));
 
 $app['twig'] = $app->share($app->extend('twig', function($twig, $app) {
+
+    function dummy_trans($str) {
+        return $str;
+    }
+
+    $twig->addFilter('trans*', new Twig_Filter_Function('dummy_trans'));
+
     return $twig;
 }));

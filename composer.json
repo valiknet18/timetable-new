@@ -10,7 +10,6 @@
         "silex/silex": "~1.2",
         "symfony/yaml": "3.0.*@dev",
         "twig/twig": "~1.13.1",
-        "symfony/form": "^2.6",
         "symfony/twig-bridge": "^2.6",
         "symfony/security": "~2.3"
     },
