@@ -14,7 +14,7 @@
 
             {% for auditory in auditories %}
                 <tr>
-                    <td>{{auditory.auditory_number}}</td>
+                    <td><a href="{{ path('view_auditory_client', {'auditory_number' : auditory.auditory_number}) }}">{{auditory.auditory_number}}</a></td>
                     <td>{{auditory.auditory_type}}</td>
                 </tr>
             {% endfor %}
