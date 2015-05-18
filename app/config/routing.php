@@ -5,6 +5,8 @@ $app->get('/', 'Valiknet\Controller\EventsController::indexAction');
 
 //Groups
 $app->get('/groups', 'Valiknet\Controller\GroupsController::indexAction');
+$app->get('/groups/{group_code}', 'Valiknet\Controller\GroupsController::viewAction')
+->bind('view_group_client');
 
 //Subject
 $app->get('/subjects', 'Valiknet\Controller\SubjectsController::indexAction');
