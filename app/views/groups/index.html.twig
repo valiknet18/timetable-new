@@ -14,7 +14,7 @@
 
             {% for group in groups %}
                 <tr>
-                    <td>{{ group.group_name }}</td>
+                    <td><a href="{{ path('view_group_client', {'group_code' : group.group_code}) }}">{{ group.group_name }}</a></td>
                     <td>{{ group.group_course }}</td>
                     <td>{{ group.group_students_count }}</td>
                 </tr>

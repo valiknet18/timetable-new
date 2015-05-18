@@ -3,11 +3,15 @@
 {% block content %}
     <div>
         <div>
-            Аудиторія: {{ auditory.auditory_number }}
+            Назва групи: {{ group.group_name }}
         </div>
 
         <div>
-            Тип аудиторії: {{ auditory.auditory_type }}
+            Курс: {{ group.group_course }}
+        </div>
+
+        <div>
+            Кількість студентів: {{ group.group_students_count }}
         </div>
 
         <div>
@@ -29,7 +33,7 @@
                     </thead>
 
 
-                    {% for event in auditory.events %}
+                    {% for event in group.events %}
                         <tr>
                             <td>{{ event.event_date_start }}</td>
                             <td>{{ event.event_date_end }}</td>

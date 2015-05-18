@@ -1,0 +1,25 @@
+{% extends "admin/admin.html.twig" %}
+
+{% block content %}
+    <div>
+        <form action="{{ path('store_auditory') }}" method="POST">
+            <div>
+                <label for="auditory_number">Номер аудиторії</label>
+                <input type="text" id="auditory_number" name="auditory_number" placeholder="Введіть номер аудиторії"/>
+            </div>
+
+            <div>
+                <label for="auditory_type">Тип аудиторії</label>
+                <select id="auditory_type" name="auditory_type">
+                    <option value="0">Лабораторна</option>
+                    <option value="1">Лекційна</option>
+                    <option value="2">Інший</option>
+                </select>
+            </div>
+
+            <div>
+                <button type="submit">Створити</button>
+            </div>
+        </form>
+    </div>
+{% endblock %}
