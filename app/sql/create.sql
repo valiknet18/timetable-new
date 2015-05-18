@@ -19,6 +19,8 @@ CREATE TABLE Events(
     subject_code domain_integer_not_null,
     auditory_number domain_integer_not_null,
 
+    repeat_type CHAR(15) NOT NULL DEFAULT('single'),
+
     PRIMARY KEY(event_code)
 );
 
@@ -27,21 +29,11 @@ CREATE TABLE Exceptions(
     event_replace_date_end event_date_nullable,
     event_replace_time_start event_time_nullable,
     event_replace_time_end event_time_nullable,
-) INHERITS(Events)
 
-CREATE TABLE Lessons(
-  lesson_code serial,
+    repeat_type CHAR(15) NOT NULL DEFAULT('exception'),
 
-  event_time_start event_time_not_null,
-  event_time_end event_time_not_null,
-
-  original_event_code domain_integer_not_null,
-  teacher_code domain_integer_not_null,
-  subject_code domain_integer_not_null,
-  auditory_number domain_integer_not_null,
-
-  PRIMARY KEY(lesson_code)
-);
+    PRIMARY KEY(event_code)
+) INHERITS(Events);
 
 CREATE TABLE Groups(
     group_code serial,
@@ -82,26 +74,22 @@ CREATE TABLE Auditories(
     PRIMARY KEY(auditory_number)
 );
 
-CREATE TABLE Repeats(
-      repeat_type CHAR(15) NOT NULL DEFAULT('single')
-) INHERITS (Events);
-
 CREATE TABLE Everyday(
   repeat_type CHAR(15) NOT NULL DEFAULT('everyday'),
   everyDay smallint_not_null_domain
-) INHERITS (Repeats);
+) INHERITS (Events);
 
 CREATE TABLE Everyweek(
   repeat_type CHAR(15) NOT NULL DEFAULT('everyweek'),
   everyDay BIT(7) NOT NULL,
   everyWeek smallint_not_null_domain
-) INHERITS (Repeats);
+) INHERITS (Events);
 
 CREATE TABLE Everymonth(
   repeat_type CHAR(15) NOT NULL DEFAULT('everymonth'),
   repeatedAt smallint_not_null_domain,
   everyMonth smallint_not_null_domain
-) INHERITS (Repeats);
+) INHERITS (Events);
 
 ALTER TABLE Events ADD CONSTRAINT event_fg_key_to_teacher FOREIGN KEY (teacher_code) REFERENCES Teachers;
 ALTER TABLE Events ADD CONSTRAINT event_fg_key_to_subject FOREIGN KEY (subject_code) REFERENCES Subjects;

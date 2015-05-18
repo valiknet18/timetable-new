@@ -14,11 +14,8 @@ INSERT INTO teacher_subject(teacher_code, subject_code) VALUES(1, 1);
 INSERT INTO teacher_subject(teacher_code, subject_code) VALUES(2, 2);
 INSERT INTO teacher_subject(teacher_code, subject_code) VALUES(3, 3);
 
-INSERT INTO everyday(event_date_start, event_date_end, event_time_start, event_time_end, event_type, teacher_code, subject_code, auditory_number, everyday)
-VALUES('2015-04-25', '2015-05-03', '08:00:00', '10:00:00', 0, 1, 1, 130, 3);
-
-INSERT INTO everyday(event_date_start, event_date_end, event_time_start, event_time_end, event_type, teacher_code, subject_code, auditory_number, everyday)
-VALUES('2015-04-20', '2015-05-10', '13:00:00', '15:00:00', 0, 2, 2, 127, 3);
+-- SELECT insert_in_event_everyday('2015-04-25', '2015-05-03', '08:00:00', '10:00:00', 0, 1, 1, 130, 3);
+-- SELECT insert_in_event_everyday('2015-04-20', '2015-05-10', '13:00:00', '15:00:00', 0, 2, 2, 127, 3);
 
 INSERT INTO everyweek(event_date_start, event_date_end, event_time_start, event_time_end, event_type, teacher_code, subject_code, auditory_number, everyday, everyweek)
 VALUES('2015-04-11', '2015-05-20', '08:00:00', '10:00:00', 0, 1, 1, 127, B'0001001', 2);
@@ -32,13 +29,22 @@ VALUES('2015-04-11', '2015-05-12', '08:00:00', '10:00:00', 0, 2, 2, 130, 3, 2);
 INSERT INTO everymonth(event_date_start, event_date_end, event_time_start, event_time_end, event_type, teacher_code, subject_code, auditory_number, repeatedat, everymonth)
 VALUES('2015-04-12', '2015-05-01', '11:00:00', '14:00:00', 0, 1, 1, 129, 1, 2);
 
-INSERT INTO repeats(event_date_start, event_date_end, event_time_start, event_time_end, event_type, teacher_code, subject_code, auditory_number)
-VALUES('2015-02-13', '2015-05-12', '08:00:00', '10:00:00', 0, 2, 2, 130);
+INSERT INTO events(event_date_start, event_date_end, event_time_start, event_time_end, event_type, teacher_code, subject_code, auditory_number)
+VALUES('2015-03-12', '2015-06-18', '08:00:00', '10:00:00', 0, 2, 2, 130);
 
-INSERT INTO repeats(event_date_start, event_date_end, event_time_start, event_time_end, event_type, teacher_code, subject_code, auditory_number)
-VALUES('2015-05-01', '2015-05-05', '11:00:00', '14:00:00', 0, 1, 1, 129);
+INSERT INTO events(event_date_start, event_date_end, event_time_start, event_time_end, event_type, teacher_code, subject_code, auditory_number)
+VALUES('2015-02-11', '2015-05-03', '12:00:00', '14:30:00', 0, 1, 1, 129);
 
 INSERT INTO groups(group_name, group_course, group_students_count) VALUES('КЕ-12', 3, 13);
 INSERT INTO groups(group_name, group_course, group_students_count) VALUES('КМ-12', 3, 12);
 INSERT INTO groups(group_name, group_course, group_students_count) VALUES('КІ-12', 3, 15);
 INSERT INTO groups(group_name, group_course, group_students_count) VALUES('КС-12', 3, 15);
+
+INSERT INTO event_group(event_code, group_code)  VALUES(7,1);
+INSERT INTO event_group(event_code, group_code)  VALUES(7,2);
+INSERT INTO event_group(event_code, group_code)  VALUES(7,3);
+INSERT INTO event_group(event_code, group_code)  VALUES(8,2);
+INSERT INTO event_group(event_code, group_code)  VALUES(8,1);
+INSERT INTO event_group(event_code, group_code)  VALUES(4,2);
+INSERT INTO event_group(event_code, group_code)  VALUES(4,3);
+INSERT INTO event_group(event_code, group_code)  VALUES(5,1);
