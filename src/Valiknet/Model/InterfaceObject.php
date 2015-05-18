@@ -6,9 +6,9 @@ interface InterfaceObject
 {
     public function save();
 
-    public static function findBy(array $pair);
+    public static function findBy($pair);
 
-    public static function findOneBy(array $pair);
+    public static function findOneBy($data);
 
     public function create();
 

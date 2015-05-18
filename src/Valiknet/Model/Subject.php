@@ -4,9 +4,31 @@ namespace Valiknet\Model;
 
 class Subject extends Model implements InterfaceObject
 {
+    /**
+     * @typeProperty('table_name')
+     */
+    private $table_name;
+
+    /**
+     * @typeProperty('property')
+     * @key(true)
+     */
     public $subject_code;
+
+    /**
+     * @typeProperty('property')
+     */
     public $subject_name;
+
+    /**
+     * @typeProperty('arrayOfObjects')
+     */
     public $teachers = [];
+
+    public function teachers()
+    {
+
+    }
 
     public static function findOneBy(array $pair)
     {
@@ -39,14 +61,6 @@ class Subject extends Model implements InterfaceObject
         }
 
         return $result;
-    }
-
-    public function mappedObject(array $data)
-    {
-        $this->subject_code = $data['subject_code'];
-        $this->subject_name = $data['subject_name'];
-
-        return $this;
     }
 
     public function save()

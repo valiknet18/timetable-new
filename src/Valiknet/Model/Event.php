@@ -42,18 +42,21 @@ class Event extends Model implements InterfaceObject
 
     /**
      * @typeProperty('object')
+     * @nameForeignKey('teacher_code')
      * @typeObject('Valiknet\Model\Teacher')
      */
     public $teacher;
 
     /**
-     * @typeProperty('property')
+     * @typeProperty('object')
+     * @nameForeignKey('subject_code')
      * @typeObject('Valiknet\Model\Subject')
      */
     public $subject;
 
     /**
-     * @typeProperty('property')
+     * @typeProperty('object')
+     * @nameForeignKey('auditory_number')
      * @typeObject('Valiknet\Model\Auditory')
      */
     public $auditory;
@@ -73,19 +76,31 @@ class Event extends Model implements InterfaceObject
         return $groups;
     }
 
-    public function auditory()
+    public function auditory($auditory_number)
     {
+        $sql = "SELECT * FROM auditories WHERE auditories.auditory_number = ?";
 
+        $auditory = self::findOne($sql, $auditory_number);
+
+        return $auditory;
     }
 
-    public function subject()
+    public function subject($subject_code)
     {
+        $sql = "SELECT * FROM subjects WHERE subjects.subject_code = ?";
 
+        $subject = self::findOne($sql, $subject_code);
+
+        return $subject;
     }
 
-    public function teacher()
+    public function teacher($teacher_code)
     {
+        $sql = "SELECT * FROM teachers WHERE teachers.teacher_code = ?";
 
+        $teacher = self::findOne($sql, $teacher_code);
+
+        return $teacher;
     }
 
     public function save()

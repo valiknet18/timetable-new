@@ -80,22 +80,25 @@ class Model implements InterfaceModel
                         if ($depth < 2) {
                             preg_match_all('#@typeObject\(\'(.*?)\'\)\n#s', $doc_block, $nameObject);
 
-                            $objectData = $this->getData($property->getName());
+                            $objectData = $this->{$property->getName()}();
 
-                            $property->setValue($this, $this->generateArraysOfObjects($nameObject[1][0], $objectData, ++$depth));
+                            if ($nameObject[1]) {
+                                $property->setValue($this, $this->generateArraysOfObjects($nameObject[1][0], $objectData, $depth + 1));
+                            }
                         }
                         break;
 
                     case "object":
                         if ($depth < 2) {
                             preg_match_all('#@typeObject\(\'(.*?)\'\)\n#s', $doc_block, $nameObject);
+                            preg_match_all('#@nameForeignKey\(\'(.*?)\'\)\n#s', $doc_block, $foreignKey);
 
-                            $objectData = $this->getData($property->getName());
+                            $objectData = $this->{$property->getName()}($data[$foreignKey[1][0]]);
 
                             $object = new $nameObject[1][0]();
 
                             if ($objectData) {
-                                $object->mappedObject($objectData, ++$depth);
+                                $object->mappedObject($objectData, $depth + 1);
                             }
 
                             $property->setValue($this, $object);
@@ -104,13 +107,6 @@ class Model implements InterfaceModel
                 }
             }
         }
-    }
-
-    private function getData($property)
-    {
-        $result = $this->{$property}();
-
-        return $result;
     }
 
     private function generateArraysOfObjects($nameClass, $data, $depth) {

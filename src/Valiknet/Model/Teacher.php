@@ -4,12 +4,46 @@ namespace Valiknet\Model;
 
 class Teacher extends Model implements InterfaceObject
 {
+    /**
+     * @typeProperty('table_name ')
+     */
+    private $table_name;
+
+    /**
+     * @typeProperty('property')
+     * @key(true)
+     */
     public $teacher_code;
+
+    /**
+     * @typeProperty('property')
+     */
     public $teacher_name;
+
+    /**
+     * @typeProperty('property')
+     */
     public $teacher_surname;
+
+    /**
+     * @typeProperty('property')
+     */
     public $teacher_last_name;
+
+    /**
+     * @typeProperty('property')
+     */
     public $teacher_phone;
+
+    /**
+     * @typeProperty('arrayOfObjects')
+     */
     public $subjects = [];
+
+    public function subjects()
+    {
+
+    }
 
     public static function findOneBy(array $pair)
     {

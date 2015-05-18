@@ -26,9 +26,4 @@ class Everyweek extends Event implements InterfaceObject
     {
 
     }
-
-    public function mappedObject(array $data)
-    {
-
-    }
 }

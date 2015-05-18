@@ -26,9 +26,4 @@ class Everymonth extends Event implements InterfaceObject
     {
 
     }
-
-    public function mappedObject(array $data)
-    {
-
-    }
 }

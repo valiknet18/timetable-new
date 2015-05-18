@@ -13,7 +13,7 @@ class Auditory extends Model implements InterfaceObject
     /**
      * @typeProperty('table_name')
      */
-    public $table_name = 'auditories';
+    private $table_name = 'auditories';
 
     /**
      * @typeProperty('property')
@@ -34,7 +34,7 @@ class Auditory extends Model implements InterfaceObject
 
     public function events()
     {
-        $sql = "SELECT repeats.* FROM repeats WHERE repeats.auditory_number = ?";
+        $sql = "SELECT events.* FROM events WHERE events.auditory_number = ?";
 
         $resultEvents = self::find($sql, $this->auditory_number);
 
