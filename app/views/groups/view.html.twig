@@ -14,44 +14,6 @@
             Кількість студентів: {{ group.group_students_count }}
         </div>
 
-        <div>
-            <h3>Події які будуть відбуваються в цій аудиторії</h3>
-            <div>
-                <table class="table table-striped">
-                    <thead>
-                    <tr>
-                        <th>Дата початку</th>
-                        <th>Дата кінця</th>
-                        <th>Час початку</th>
-                        <th>Час кінця</th>
-                        <th>Повторення</th>
-                        <th>Група(и)</th>
-                        <th>Предмет</th>
-                        <th>Викладач</th>
-                        <th>Тип</th>
-                    </tr>
-                    </thead>
-
-
-                    {% for event in group.events %}
-                        <tr>
-                            <td>{{ event.event_date_start }}</td>
-                            <td>{{ event.event_date_end }}</td>
-                            <td>{{ event.event_time_start }}</td>
-                            <td>{{ event.event_time_end }}</td>
-                            <td>undefined</td>
-                            <td>
-                                {% for group in event.groups %}
-                                    {{ group.group_name }}
-                                {% endfor %}
-                            </td>
-                            <td>{{ event.subject.subject_name }}</td>
-                            <td>{{ event.teacher.teacher_surname }} {{ event.teacher.teacher_name }} {{ event.teacher.teacher_last_name }}</td>
-                            <td>{{ event.event_type }}</td>
-                        </tr>
-                    {% endfor %}
-                </table>
-            </div>
-        </div>
+        {% include 'events/events_list.html.twig' with {'events' : group.events, 'message': 'Події в цій группі'}%}
     </div>
 {% endblock %}

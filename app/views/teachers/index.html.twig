@@ -7,34 +7,19 @@
         <table class="table table-striped">
             <thead>
             <tr>
-                <th>Прізвище</th>
-                <th>Ім’я</th>
-                <th>По-батькові</th>
+                <th>П. І. Б.</th>
                 <th>Номер телефону</th>
-                <th>Посилання</th>
             </tr>
             </thead>
 
             {% for teacher in teachers %}
             <tr>
                 <td>
-                    {{teacher.teacher_surname}}
-                </td>
-
-                <td>
-                    {{teacher.teacher_name}}
-                </td>
-
-                <td>
-                    {{teacher.teacher_last_name}}
+                    <a href="{{ path('view_teacher_client', {'teacher_code': teacher.teacher_code}) }}">{{teacher.teacher_surname}} {{teacher.teacher_name}} {{teacher.teacher_last_name}}</a>
                 </td>
 
                 <td>
                     {{teacher.teacher_phone}}
-                </td>
-
-                <td>
-                    link
                 </td>
             </tr>
             {% endfor %}

@@ -1,0 +1,15 @@
+{% extends 'app.html.twig' %}
+
+{% block content %}
+    <div>
+        <div>
+            Назва предмета: {{ subject.subject_name }}
+        </div>
+
+        <div>
+            Викладачі: {% for teacher in subject.teachers %} <a href="{{ path('view_teacher_client', {'teacher_code': teacher.teacher_code}) }}">{{ teacher.teacher_surname }} {{ teacher.teacher_name }} {{ teacher.teacher_last_name }}</a> {% endfor %}
+        </div>
+
+        {% include "events/events_list.html.twig" with {'events' : subject.events, 'message': 'Події з цим предметом'} %}
+    </div>
+{% endblock %}

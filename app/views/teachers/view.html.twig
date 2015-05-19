@@ -1,0 +1,15 @@
+{% extends 'app.html.twig' %}
+
+{% block content %}
+    <div>
+        <div>
+            П.І.Б: {{teacher.teacher_surname}} {{teacher.teacher_name}} {{teacher.teacher_last_name}}
+        </div>
+
+        <div>
+            Номер телефону: {{ teacher.teacher_phone }}
+        </div>
+
+        {% include "events/events_list.html.twig" with {'events' : teacher.events, 'message': 'Події в цього викладача'} %}
+    </div>
+{% endblock %}
