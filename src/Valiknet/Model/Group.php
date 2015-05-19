@@ -15,6 +15,7 @@ class Group extends Model implements InterfaceObject
      */
     public $group_code;
 
+
     /**
      * @typeProperty('property')
      */
@@ -34,18 +35,26 @@ class Group extends Model implements InterfaceObject
      * @typeProperty('arrayOfObjects')
      * @typeObject('Valiknet\Model\Event')
      */
-    public $events;
+    public $events = [];
 
     public function events()
     {
-        $sql = "SELECT event_group.* FROM event_group INNER JOIN events ON events.event_code = event_group.event_code WHERE event_group.group_code = ?";
-        $events = self::findBy($sql, $this->group_code);
+        $sql = "SELECT * FROM event_group INNER JOIN events ON events.event_code = event_group.event_code WHERE event_group.group_code = ? AND events.event_date_end > NOW()";
+        $events = self::find($sql, $this->group_code);
 
         return $events;
     }
 
+    public function create()
+    {
+        $sql = "INSERT INTO groups(group_name, group_course, group_students_count) VALUES (?, ?, ?)";
+        $save = $this->getPdo()->prepare($sql);
+        $save->execute(array($this->group_name, $this->group_course, $this->group_students_count));
+    }
+
     public function save()
     {
+
     }
 
     public static function findBy($pair = null)
@@ -68,7 +77,7 @@ class Group extends Model implements InterfaceObject
         return $result;
     }
 
-    public static function findOneBy($group_code)
+    public static function findOneBy($group_code = null)
     {
         $sql = "SELECT groups.* FROM groups WHERE groups.group_code = ?";
 
@@ -78,10 +87,5 @@ class Group extends Model implements InterfaceObject
         $group->mappedObject($data);
 
         return $group;
-    }
-
-    public function create()
-    {
-
     }
 }

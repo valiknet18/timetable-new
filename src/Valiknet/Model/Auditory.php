@@ -34,14 +34,14 @@ class Auditory extends Model implements InterfaceObject
 
     public function events()
     {
-        $sql = "SELECT events.* FROM events WHERE events.auditory_number = ?";
+        $sql = "SELECT events.* FROM events WHERE events.auditory_number = ? AND events.event_date_end > NOW()";
 
         $resultEvents = self::find($sql, $this->auditory_number);
 
         return $resultEvents;
     }
 
-    public static function findOneBy(array $pair)
+    public static function findOneBy($pair = null)
     {
         $sql = "SELECT auditories.* FROM auditories WHERE auditories.auditory_number = ?";
 
@@ -53,7 +53,7 @@ class Auditory extends Model implements InterfaceObject
         return $auditory;
     }
 
-    public static function findBy(array $pair = [])
+    public static function findBy($pair = null)
     {
         if (count($pair) > 0) {
             $sql = "SELECT * FROM auditories INNER JOIN events ON auditories.auditory_number = events.auditory_number WHERE ? = ?";

@@ -22,26 +22,45 @@ class Subject extends Model implements InterfaceObject
 
     /**
      * @typeProperty('arrayOfObjects')
+     * @typeObject('Valiknet\Model\Teacher')
      */
     public $teachers = [];
 
+    /**
+     * @typeProperty('arrayOfObjects')
+     * @typeObject('Valiknet\Model\Event')
+     */
+    public $events = [];
+
     public function teachers()
     {
+        $sql = "SELECT * FROM teacher_subject LEFT JOIN teachers ON teacher_subject.teacher_code = teachers.teacher_code WHERE teacher_subject.subject_code = ?";
+        $teachers = self::find($sql, $this->subject_code);
 
+        return $teachers;
     }
 
-    public static function findOneBy(array $pair)
+    public function events()
     {
-        $sql = "SELECT * FROM auditories INNER JOIN events ON auditories.auditory_number = events.auditory_number WHERE ? = ? LIMIT 1";
+        $sql = "SELECT * FROM events WHERE events.subject_code = ? AND events.event_date_end > NOW()";
+        $events = self::find($sql, $this->subject_code);
 
-        $result = self::findOne($sql, $pair);
-
-        self::mappedObject($result);
-
-        return self;
+        return $events;
     }
 
-    public static function findBy(array $pair = [])
+    public static function findOneBy($pair)
+    {
+        $sql = "SELECT * FROM subjects WHERE subjects.subject_code = ?";
+
+        $data = self::findOne($sql, $pair);
+
+        $subject = new Subject();
+        $subject->mappedObject($data);
+
+        return $subject;
+    }
+
+    public static function findBy($pair = null)
     {
         if (count($pair) > 0) {
             $sql = "SELECT * FROM subjects WHERE ? = ?";

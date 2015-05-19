@@ -2,6 +2,8 @@
 
 namespace Valiknet\Model;
 
+use Silex\ExceptionHandler;
+
 class Event extends Model implements InterfaceObject
 {
     /**
@@ -108,18 +110,37 @@ class Event extends Model implements InterfaceObject
 
     }
 
-    public static function findBy(array $pair)
+    public static function findBy($pair = null)
     {
 
     }
 
-    public static function findOneBy(array $pair)
+    public static function findOneBy($pair = null)
     {
 
     }
 
     public function create()
     {
+        $this->getPdo()->beginTransaction();
+
+        try {
+            $sql = "INSERT INTO events(event_date_start, event_date_end, event_time_start, event_time_end, event_type, teacher_code, subject_code, auditory_number) VALUE(?, ?, ?, ?, ?, ?, ?, ?)";
+            $insertInEvents = $this->getPdo()->prepare($sql);
+            $insertInEvents->execute(array($this->event_time_start, $this->event_date_end, $this->event_time_start, $this->event_time_end, $this->event_type, $this->teacher->teacher_code, $this->subject->subject_code, $this->auditory->auditory_number));
+
+            $lastIndex = $this->getPdo()->lastInsertId();
+
+            foreach ($this->groups as $group) {
+                $sql = "INSERT INTO event_group(event_code, group_code) VALUES(?, ?)";
+                $insertInEventGroup = $this->getPdo()->prepare($sql);
+                $insertInEventGroup->execute(array($lastIndex, $group->group_code));
+            }
+
+            $this->getPdo()->commit();
+        } catch (\PDOException $pdoex) {
+            $this->getPdo()->rollBack();
+        }
 
     }
 }

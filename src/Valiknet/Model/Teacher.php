@@ -37,26 +37,44 @@ class Teacher extends Model implements InterfaceObject
 
     /**
      * @typeProperty('arrayOfObjects')
+     * @typeObject('Valiknet\Model\Subject')
      */
     public $subjects = [];
 
+    /**
+     * @typeProperty('arrayOfObjects')
+     * @typeObject('Valiknet\Model\Event')
+     */
+    public $events = [];
+
+    public function events()
+    {
+        $sql = "SELECT * FROM events WHERE events.teacher_code = ? AND events.event_date_end > NOW()";
+        $events = self::find($sql, $this->teacher_code);
+
+        return $events;
+    }
+
     public function subjects()
     {
+        $sql = "SELECT * FROM teacher_subject INNER JOIN subjects ON subjects.subject_code = teacher_subject.subject_code WHERE teacher_subject.teacher_code = ? ";
+        $subjects = self::find($sql, $this->teacher_code);
 
+        return $subjects;
     }
 
-    public static function findOneBy(array $pair)
+    public static function findOneBy($pair)
     {
-        $sql = "SELECT * FROM teachers INNER JOIN events ON auditories.auditory_number = events.auditory_number WHERE ? = ? LIMIT 1";
+        $sql = "SELECT * FROM teachers WHERE teachers.teacher_code = ?";
+        $data = self::findOne($sql, $pair);
 
-        $result = self::findOne($sql, $pair);
+        $teacher = new Teacher();
+        $teacher->mappedObject($data);
 
-        self::mappedObject($result);
-
-        return self;
+        return $teacher;
     }
 
-    public static function findBy(array $pair = [])
+    public static function findBy($pair = null)
     {
         if (count($pair) > 0) {
             $sql = "SELECT * FROM teachers WHERE ? = ?";
