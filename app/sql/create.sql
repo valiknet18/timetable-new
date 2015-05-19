@@ -33,7 +33,7 @@ CREATE TABLE Exceptions(
     repeat_type CHAR(15) NOT NULL DEFAULT('exception'),
 
     PRIMARY KEY(event_code)
-) INHERITS(Events);
+);
 
 CREATE TABLE Groups(
     group_code serial,
@@ -76,20 +76,26 @@ CREATE TABLE Auditories(
 
 CREATE TABLE Everyday(
   repeat_type CHAR(15) NOT NULL DEFAULT('everyday'),
-  everyDay smallint_not_null_domain
-) INHERITS (Events);
+  everyDay smallint_not_null_domain,
+  event_code integer,
+  FOREIGN KEY(event_code) REFERENCES Events(event_code)
+);
 
 CREATE TABLE Everyweek(
   repeat_type CHAR(15) NOT NULL DEFAULT('everyweek'),
   everyDay BIT(7) NOT NULL,
-  everyWeek smallint_not_null_domain
-) INHERITS (Events);
+  everyWeek smallint_not_null_domain,
+  event_code integer,
+  FOREIGN KEY(event_code) REFERENCES Events(event_code)
+);
 
 CREATE TABLE Everymonth(
   repeat_type CHAR(15) NOT NULL DEFAULT('everymonth'),
   repeatedAt smallint_not_null_domain,
-  everyMonth smallint_not_null_domain
-) INHERITS (Events);
+  everyMonth smallint_not_null_domain,
+  event_code integer,
+  FOREIGN KEY(event_code) REFERENCES Events(event_code)
+);
 
 ALTER TABLE Events ADD CONSTRAINT event_fg_key_to_teacher FOREIGN KEY (teacher_code) REFERENCES Teachers;
 ALTER TABLE Events ADD CONSTRAINT event_fg_key_to_subject FOREIGN KEY (subject_code) REFERENCES Subjects;
