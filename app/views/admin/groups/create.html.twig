@@ -1,0 +1,35 @@
+{% extends 'admin/admin.html.twig' %}
+
+{% block content %}
+    <div>
+        <form action="{{ path('story_group') }}" method="POST">
+            <div>
+                <label for="group_name">
+                    Назва групи
+                </label>
+                <div>
+                    <input type="text" id="group_name" name="group_name" />
+                </div>
+            </div>
+            <div>
+                <label for="group_name">
+                    Курс групи
+                </label>
+                <div>
+                    <input type="text" id="group_course" name="group_course" />
+                </div>
+            </div>
+            <div>
+                <label for="group_name">
+                    Кількість студентів групи
+                </label>
+                <div>
+                    <input type="text" id="group_students_count" name="group_students_count" />
+                </div>
+            </div>
+            <div>
+                <button type="Зберегти">Зберегти</button>
+            </div>
+        </form>
+    </div>
+{% endblock %}

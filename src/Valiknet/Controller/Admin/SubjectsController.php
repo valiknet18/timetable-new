@@ -16,4 +16,14 @@ class SubjectsController extends AbstractController
 
         return $app['twig']->render('admin/subjects/index.html.twig', ['subjects' => $subjects]);
     }
+
+    public function newAction(Application $app, Request $request)
+    {
+
+    }
+
+    public function storeAction(Application $app, Request $request)
+    {
+
+    }
 }
