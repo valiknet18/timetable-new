@@ -10,6 +10,8 @@ $app->get('/groups/{group_code}', 'Valiknet\Controller\GroupsController::viewAct
 
 //Subject
 $app->get('/subjects', 'Valiknet\Controller\SubjectsController::indexAction');
+$app->get('/subjects/{subject_code}', 'Valiknet\Controller\SubjectsController::viewAction')
+->bind('view_subject_client');
 
 //Auditories
 $app->get('/auditories', 'Valiknet\Controller\AuditoriesController::indexAction');
@@ -18,7 +20,8 @@ $app->get('/auditories/{auditory_number}', 'Valiknet\Controller\AuditoriesContro
 
 //Teachers
 $app->get('/teachers', 'Valiknet\Controller\TeachersController::indexAction');
-
+$app->get('/teachers/{teacher_code}', 'Valiknet\Controller\TeachersController::viewAction')
+->bind('view_teacher_client');
 
 //Admin
 
@@ -26,7 +29,12 @@ $app->get('/teachers', 'Valiknet\Controller\TeachersController::indexAction');
 $app->get('/admin', 'Valiknet\Controller\Admin\EventsController::indexAction');
 
 //Groups
-$app->get('/admin/groups', 'Valiknet\Controller\Admin\GroupsController::indexAction');
+$app->get('/admin/groups', 'Valiknet\Controller\Admin\GroupsController::indexAction')
+    ->bind('list_groups_admin');
+$app->get('/admin/groups/new', 'Valiknet\Controller\Admin\GroupsController::newAction')
+    ->bind('create_group');
+$app->post('/admin/groups/story', 'Valiknet\Controller\Admin\GroupsController::storyAction')
+    ->bind('story_group');
 
 //Subject
 $app->get('/admin/subjects', 'Valiknet\Controller\Admin\SubjectsController::indexAction');
