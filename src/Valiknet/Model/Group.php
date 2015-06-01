@@ -60,7 +60,7 @@ class Group extends Model implements InterfaceObject
     public static function findBy($pair = null)
     {
         if (count($pair) > 0) {
-            $groups = self::find('SELECT * FROM groups WHERE ? = ?', $pair);
+            $groups = self::find('SELECT * FROM groups WHERE groups.group_course = ?', $pair);
         } else {
             $groups = self::find('SELECT * FROM groups');
         }

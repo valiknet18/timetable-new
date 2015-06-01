@@ -18,7 +18,7 @@ class AuditoriesController extends AbstractController
 
     public function viewAction(Application $app, $auditory_number)
     {
-        $auditory = Auditory::findOneBy(['auditory_number' => $auditory_number]);
+        $auditory = Auditory::findOneBy($auditory_number);
 
         return $app['twig']->render('auditories/view.html.twig', ['auditory' => $auditory]);
     }

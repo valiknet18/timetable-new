@@ -19,18 +19,7 @@ CREATE TABLE Events(
     subject_code domain_integer_not_null,
     auditory_number domain_integer_not_null,
 
-    repeat_type CHAR(15) NOT NULL DEFAULT('single'),
-
-    PRIMARY KEY(event_code)
-);
-
-CREATE TABLE Exceptions(
-    event_replace_date_start event_date_nullable,
-    event_replace_date_end event_date_nullable,
-    event_replace_time_start event_time_nullable,
-    event_replace_time_end event_time_nullable,
-
-    repeat_type CHAR(15) NOT NULL DEFAULT('exception'),
+    repeat_type domain_integer_not_null,
 
     PRIMARY KEY(event_code)
 );
@@ -74,15 +63,25 @@ CREATE TABLE Auditories(
     PRIMARY KEY(auditory_number)
 );
 
+CREATE TABLE Exceptions(
+    event_replace_date_start event_date_nullable,
+    event_replace_date_end event_date_nullable,
+    event_replace_time_start event_time_nullable,
+    event_replace_time_end event_time_nullable,
+    parent_event domain_integer_not_null,
+    event_code domain_integer_not_null,
+
+    FOREIGN KEY(event_code) REFERENCES Events(event_code),
+    FOREIGN KEY(parent_event) REFERENCES Events(event_code)
+);
+
 CREATE TABLE Everyday(
-  repeat_type CHAR(15) NOT NULL DEFAULT('everyday'),
   everyDay smallint_not_null_domain,
   event_code integer,
   FOREIGN KEY(event_code) REFERENCES Events(event_code)
 );
 
 CREATE TABLE Everyweek(
-  repeat_type CHAR(15) NOT NULL DEFAULT('everyweek'),
   everyDay BIT(7) NOT NULL,
   everyWeek smallint_not_null_domain,
   event_code integer,
@@ -90,7 +89,6 @@ CREATE TABLE Everyweek(
 );
 
 CREATE TABLE Everymonth(
-  repeat_type CHAR(15) NOT NULL DEFAULT('everymonth'),
   repeatedAt smallint_not_null_domain,
   everyMonth smallint_not_null_domain,
   event_code integer,
@@ -101,25 +99,5 @@ ALTER TABLE Events ADD CONSTRAINT event_fg_key_to_teacher FOREIGN KEY (teacher_c
 ALTER TABLE Events ADD CONSTRAINT event_fg_key_to_subject FOREIGN KEY (subject_code) REFERENCES Subjects;
 ALTER TABLE Events ADD CONSTRAINT event_fg_key_to_auditory FOREIGN KEY (auditory_number) REFERENCES Auditories;
 
-ALTER TABLE Everyday ADD CONSTRAINT everyday_fg_key_to_teacher FOREIGN KEY (teacher_code) REFERENCES Teachers;
-ALTER TABLE Everyday ADD CONSTRAINT everyday_fg_key_to_subject FOREIGN KEY (subject_code) REFERENCES Subjects;
-ALTER TABLE Everyday ADD CONSTRAINT everyday_fg_key_to_auditory FOREIGN KEY (auditory_number) REFERENCES Auditories;
-
-ALTER TABLE Everyweek ADD CONSTRAINT everyweek_fg_key_to_teacher FOREIGN KEY (teacher_code) REFERENCES Teachers;
-ALTER TABLE Everyweek ADD CONSTRAINT everyweek_fg_key_to_subject FOREIGN KEY (subject_code) REFERENCES Subjects;
-ALTER TABLE Everyweek ADD CONSTRAINT everyweek_fg_key_to_auditory FOREIGN KEY (auditory_number) REFERENCES Auditories;
-
-ALTER TABLE Everymonth ADD CONSTRAINT everymonth_fg_key_to_teacher FOREIGN KEY (teacher_code) REFERENCES Teachers;
-ALTER TABLE Everymonth ADD CONSTRAINT everymonth_fg_key_to_subject FOREIGN KEY (subject_code) REFERENCES Subjects;
-ALTER TABLE Everymonth ADD CONSTRAINT everymonth_fg_key_to_auditory FOREIGN KEY (auditory_number) REFERENCES Auditories;
-
-ALTER TABLE Event_group ADD CONSTRAINT event_group_fg_key_to_event FOREIGN KEY (event_code) REFERENCES Events;
-ALTER TABLE Event_group ADD CONSTRAINT event_group_fg_key_to_group FOREIGN KEY (group_code) REFERENCES Groups;
-
 ALTER TABLE Teacher_subject ADD CONSTRAINT teacher_subject_group_fg_key_to_event FOREIGN KEY (teacher_code) REFERENCES Teachers MATCH SIMPLE ON UPDATE NO ACTION ON DELETE NO ACTION DEFERRABLE INITIALLY IMMEDIATE;
 ALTER TABLE Teacher_subject ADD CONSTRAINT teacher_subject_fg_key_to_group FOREIGN KEY (subject_code) REFERENCES Subjects MATCH SIMPLE ON UPDATE NO ACTION ON DELETE NO ACTION DEFERRABLE INITIALLY IMMEDIATE;
-
-ALTER TABLE Lessons ADD CONSTRAINT lessons_fg_key_to_teacher FOREIGN KEY (teacher_code) REFERENCES Teachers;
-ALTER TABLE Lessons ADD CONSTRAINT lessons_fg_key_to_subject FOREIGN KEY (subject_code) REFERENCES Subjects;
-ALTER TABLE Lessons ADD CONSTRAINT lessons_fg_key_to_auditory FOREIGN KEY (auditory_number) REFERENCES Auditories;
-ALTER TABLE Lessons ADD CONSTRAINT lessons_fg_key_to_event FOREIGN KEY (original_event_code) REFERENCES Events;

@@ -2,14 +2,13 @@
 
 {% block content %}
     <div>
-    <h3></h3>
+        <h3><a href="{{ path('create_teacher') }}">Додати викладача</a></h3>
 
         <table class="table table-striped">
             <thead>
             <tr>
                 <th>П.І.Б</th>
                 <th>Номер телефону</th>
-                <th>Посилання</th>
             </tr>
             </thead>
 
@@ -21,10 +20,6 @@
 
                 <td>
                     {{teacher.teacher_phone}}
-                </td>
-
-                <td>
-                    link
                 </td>
             </tr>
             {% endfor %}

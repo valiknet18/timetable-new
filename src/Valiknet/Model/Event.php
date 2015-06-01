@@ -3,6 +3,7 @@
 namespace Valiknet\Model;
 
 use Silex\ExceptionHandler;
+use Symfony\Component\HttpFoundation\Request;
 
 class Event extends Model implements InterfaceObject
 {
@@ -64,7 +65,7 @@ class Event extends Model implements InterfaceObject
     public $auditory;
 
     /**
-     * @typeProperty('arrayOfObject')
+     * @typeProperty('arrayOfObjects')
      * @typeObject('Valiknet\Model\Group')
      */
     public $groups = [];
@@ -110,14 +111,94 @@ class Event extends Model implements InterfaceObject
 
     }
 
-    public static function findBy($pair = null)
+    public static function findBy($pair = null, $full = false)
     {
+        if ($pair) {
+            $sql = "SELECT * FROM events WHERE repeat_type = ?";
 
+            $events = self::find($sql, $pair);
+        } else {
+            $sql = "SELECT * FROM events";
+
+            $events = self::find($sql);
+        }
+
+        $result  = [];
+
+        foreach ($events as $value) {
+            switch ($value['repeat_type']) {
+                case 1:
+
+                    $event = new Event();
+
+                    break;
+
+                case 2:
+                    $sql = "SELECT * FROM everyday WHERE event_code = ? LIMIT 1";
+                    $everyday = self::findOne($sql, $value['event_code']);
+
+                    unset($everyday['event_code']);
+
+                    $value = array_merge($value, $everyday);
+                    $event = new Everyday();
+
+                    break;
+
+                case 3:
+                    $sql = "SELECT * FROM everyweek WHERE event_code = ? LIMIT 1";
+                    $everyweek = self::findOne($sql, $value['event_code']);
+
+                    unset($everyweek['event_code']);
+
+                    $value = array_merge($value, $everyweek);
+                    $event = new Everyweek();
+
+                    break;
+
+                case 4:
+                    $sql = "SELECT * FROM everymonth WHERE event_code = ? LIMIT 1";
+                    $everymonth = self::findOne($sql, $value['event_code']);
+
+                    unset($everymonth['event_code']);
+
+                    $value = array_merge($value, $everymonth);
+                    $event = new Everymonth();
+
+                    break;
+
+                case 5:
+                    $sql = "SELECT * FROM exeptions WHERE event_code = ? LIMIT 1";
+                    $exeptions = self::findOne($sql, $value['event_code']);
+
+                    unset($exeptions['event_code']);
+
+                    $value = array_merge($value, $exeptions);
+                    $event = new Exception();
+
+                    break;
+            }
+
+            $event->mappedObject($value);
+
+            $result[] = $event;
+        }
+
+        if ($full) {
+            $result = self::proccessEvents($result);
+        }
+
+        return $result;
     }
 
     public static function findOneBy($pair = null)
     {
+        $sql = "SELECT * FROM events WHERE event_code = ?";
+        $data = self::findOne($sql, $pair);
 
+        $event = new Event();
+        $event->mappedObject($data);
+
+        return $event;
     }
 
     public function create()
@@ -125,9 +206,9 @@ class Event extends Model implements InterfaceObject
         $this->getPdo()->beginTransaction();
 
         try {
-            $sql = "INSERT INTO events(event_date_start, event_date_end, event_time_start, event_time_end, event_type, teacher_code, subject_code, auditory_number) VALUE(?, ?, ?, ?, ?, ?, ?, ?)";
+            $sql = "INSERT INTO events(event_date_start, event_date_end, event_time_start, event_time_end, event_type, teacher_code, subject_code, auditory_number, repeat_type) VALUE(?, ?, ?, ?, ?, ?, ?, ?)";
             $insertInEvents = $this->getPdo()->prepare($sql);
-            $insertInEvents->execute(array($this->event_time_start, $this->event_date_end, $this->event_time_start, $this->event_time_end, $this->event_type, $this->teacher->teacher_code, $this->subject->subject_code, $this->auditory->auditory_number));
+            $insertInEvents->execute(array($this->event_time_start, $this->event_date_end, $this->event_time_start, $this->event_time_end, $this->event_type, $this->teacher->teacher_code, $this->subject->subject_code, $this->auditory->auditory_number, $this->repeat_type));
 
             $lastIndex = $this->getPdo()->lastInsertId();
 
@@ -142,5 +223,80 @@ class Event extends Model implements InterfaceObject
             $this->getPdo()->rollBack();
         }
 
+    }
+
+    public function setData(Request $request)
+    {
+        $this->event_date_start = $request->request->get('event_date_start');
+        $this->event_date_end = $request->request->get('event_date_end');
+        $this->event_time_start = $request->request->get('event_time_start');
+        $this->event_time_end = $request->request->get('event_time_end');
+        $this->event_type = $request->request->get('event_type');
+        $this->repeat_type = 1;
+    }
+
+    public static function proccessEvents($events)
+    {
+        $date = time();
+        $date_now = (new \DateTime())->setTimestamp($date)->format('Y-m-d');
+        $date = getdate($date);
+
+        $result = [];
+        $exceptions = [];
+
+        foreach ($events as $event) {
+            if (in_array($event->event_code, $exceptions)) {
+                continue;
+            }
+
+            switch ($event->repeat_type) {
+                case 1:
+                    if (($event->event_date_start <= $date_now && $date_now <= $event->event_date_end)) {
+                        $result[] = $event;
+                    }
+                    break;
+
+                case 2:
+                    if ((($date['wday'] + 1) % $event->everyday == 0) && ($event->event_date_start <= $date_now && $date_now <= $event->event_date_end)) {
+                        $result[] = $event;
+                    }
+                    break;
+
+                case 3:
+                    $date['wday'] = ($date['wday'] == 0)?7:$date['wday'];
+
+                    $week = (int) date("W",strtotime("2015-06-12"));
+
+                    $day = (bool) substr($event->everyday, (($date['wday']) * -1), 1);
+                    if ($day && ($week % $event->everyweek == 0)) {
+                        $result[] = $event;
+                    }
+                    break;
+
+                case 4:
+                    if ($event->repeat_type == $date['mday'] && ($date['mon'] % $event->everymonth) == 0) {
+                        $result[] = $event;
+                    }
+                    break;
+
+                case 5:
+                    if ($event->event_replace_date_start <= $date_now && $date_now <= $event->event_replace_date_end && $event->event_date_start <= $date_now && $date_now <= $event->event_date_end) {
+                        $parent_code = $event->parent_code;
+
+                        array_filter($result, function ($event) use ($parent_code) {
+                            if ($event->event_code == $parent_code) {
+                                unset($event);
+                            }
+                        });
+
+                        $exceptions[] = $parent_code;
+
+                        $result[] = $event;
+                    }
+                    break;
+            }
+        }
+
+        return $result;
     }
 }

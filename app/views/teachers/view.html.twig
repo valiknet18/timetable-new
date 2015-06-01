@@ -10,6 +10,10 @@
             Номер телефону: {{ teacher.teacher_phone }}
         </div>
 
+        <div>
+            Предмети: {% for subject in teacher.subjects %} <a href="{{ path('view_subject_client', {'subject_code' : subject.subject_code}) }}">{{ subject.subject_name }}</a> {% endfor %}
+        </div>
+
         {% include "events/events_list.html.twig" with {'events' : teacher.events, 'message': 'Події в цього викладача'} %}
     </div>
 {% endblock %}

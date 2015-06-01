@@ -45,7 +45,7 @@ class Auditory extends Model implements InterfaceObject
     {
         $sql = "SELECT auditories.* FROM auditories WHERE auditories.auditory_number = ?";
 
-        $resultAuditory = self::findOne($sql, $pair['auditory_number']);
+        $resultAuditory = self::findOne($sql, $pair);
 
         $auditory = new Auditory();
         $auditory->mappedObject($resultAuditory);
@@ -56,10 +56,10 @@ class Auditory extends Model implements InterfaceObject
     public static function findBy($pair = null)
     {
         if (count($pair) > 0) {
-            $sql = "SELECT * FROM auditories INNER JOIN events ON auditories.auditory_number = events.auditory_number WHERE ? = ?";
+            $sql = "SELECT * FROM auditories WHERE auditories.auditory_type = ?";
             $auditories = self::find($sql, $pair);
         } else {
-            $sql = "SELECT auditories.*, COUNT(events.event_code) AS count_ev FROM auditories LEFT JOIN events ON events.auditory_number = auditories.auditory_number GROUP BY auditories.auditory_number";
+            $sql = "SELECT auditories.* FROM auditories";
             $auditories = self::find($sql);
         }
 

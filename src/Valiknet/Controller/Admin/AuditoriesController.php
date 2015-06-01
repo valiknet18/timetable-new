@@ -4,6 +4,7 @@ namespace Valiknet\Controller\Admin;
 
 use Silex\Application;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Valiknet\Controller\AbstractController;
 use Valiknet\Model\Auditory;
 use Valiknet\Model\Model;
@@ -17,7 +18,7 @@ class AuditoriesController extends AbstractController
         return $app['twig']->render('admin/auditories/index.html.twig', ['auditories' => $auditories]);
     }
 
-    public function createAction(Application $app)
+    public function newAction(Application $app)
     {
         return $app['twig']->render('/admin/auditories/create.html.twig');
     }
@@ -32,5 +33,12 @@ class AuditoriesController extends AbstractController
         $auditory->create();
 
         return $app->redirect($app['url_generator']->generate('list_auditories_admin'));
+    }
+
+    public function getAction(Application $app, Request $request)
+    {
+        $auditories = Auditory::findBy($request->query->get('auditory_type'));
+
+        return new Response(json_encode($auditories), 200, ['Content-type' => 'application/json']);
     }
 }

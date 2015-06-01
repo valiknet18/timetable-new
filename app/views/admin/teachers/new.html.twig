@@ -1,0 +1,45 @@
+{% extends 'admin/admin.html.twig' %}
+
+{% block content %}
+    <div>
+        <div>
+            <form action="{{ path('story_teacher') }}" method="POST">
+                <div>
+                    <label for="teacher_surname">Прізвище викладача</label>
+                    <input type="text" id="teacher_surname" name="teacher_surname">
+                </div>
+
+                <div>
+                    <label for="teacher_name">Ім’я викладача</label>
+                    <input type="text" id="teacher_name" name="teacher_name">
+                </div>
+
+                <div>
+                    <label for="teacher_last_name">По-батькові викладача</label>
+                    <input type="text" id="teacher_last_name" name="teacher_last_name" />
+                </div>
+
+                <div>
+                    <label for="teacher_phone">Телефон викладача</label>
+                    <input type="text" id="teacher_phone" name="teacher_phone" />
+                </div>
+
+                <div>
+                    <label for="subjects">
+                        Предмети
+                    </label>
+
+                    <select multiple="true" name="subjects[]" id="subjects">
+                        {% for subject in subjects %}
+                            <option value="{{ subject.subject_code }}">{{ subject.subject_name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div>
+                    <button type="submit">Створити</button>
+                </div>
+            </form>
+        </div>
+    </div>
+{% endblock %}

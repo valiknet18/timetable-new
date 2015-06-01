@@ -2,19 +2,156 @@
 
 {% block content %}
     <div>
-        <form action="{{ path('store_auditory') }}" method="POST">
+        <form action="{{ path('story_event') }}" method="POST">
             <div>
-                <label for="auditory_number">Номер аудиторії</label>
-                <input type="text" id="auditory_number" name="auditory_number" placeholder="Введіть номер аудиторії"/>
+                <label for="event_date_start">Дата початку події</label>
+                <input type="date" name="event_date_start" id="event_date_start" />
             </div>
 
             <div>
-                <label for="auditory_type">Тип аудиторії</label>
-                <select id="auditory_type" name="auditory_type">
-                    <option value="0">Лабораторна</option>
-                    <option value="1">Лекційна</option>
-                    <option value="2">Інший</option>
+                <label for="event_date_end">Дата кінця події</label>
+                <input type="date" name="event_date_end" id="event_date_end" />
+            </div>
+
+            <div>
+                <label for="event_time_start">Час початку події</label>
+                <input type="time" name="event_time_start" id="event_time_start" />
+            </div>
+
+            <div>
+                <label for="event_time_end">Час кінця події</label>
+                <input type="time" name="event_time_end" id="event_time_end" />
+            </div>
+
+            <div>
+                <label>Викладач</label>
+                <select id="teacher" name="teacher">
+                    {% for teacher in teachers %}
+                        <option value="{{ teacher.teacher_code }}">{{ teacher.teacher_surname }} {{ teacher.teacher_name }} {{ teacher.teacher_last_name }}</option>
+                    {% endfor %}
                 </select>
+            </div>
+
+            <div>
+                <label>Рік вступу</label>
+                <input type="number" min="2000" max="2015" name="group_course" id="group_course"/>
+            </div>
+
+            <div>
+                <label for="event_type">Тип події</label>
+                <select name="event_type" id="event_type">
+                    <option value="1">Лабораторна робота</option>
+                    <option value="2">Лекція</option>
+                    <option value="3">Інше</option>
+                </select>
+            </div>
+
+            <div>
+                <label for="repeat_type">Тип повторення</label>
+                <select name="repeat_type" id="repeat_type">
+                   <option value="0">Одиночка подія</option>
+                   <option value="1">Кожний день</option>
+                   <option value="2">Кожний тиждень</option>
+                   <option value="3">Кожний місяць</option>
+                   <option value="4">Виключення</option>
+                </select>
+            </div>
+
+            <div id="repeat_area">
+                <div id="everyday">
+                    <div>
+                        <label>
+                            Частота повторення в днях
+                        </label>
+
+                        <span>Кожен <input type="number" min="1" max="6" name="everyday" /> день</span>
+                    </div>
+                </div>
+
+                <div id="everyweek">
+                    <div>
+                        <label>
+                            В які дні повторювати
+                        </label>
+
+                        <select name="everyday[]" multiple>
+                            <option value="0">Понеділок</option>
+                            <option value="1">Вівторок</option>
+                            <option value="2">Середа</option>
+                            <option value="3">Четвер</option>
+                            <option value="4">Пятниця</option>
+                            <option value="5">Субота</option>
+                            <option value="6">Неділя</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label>Частота повторення в тижнях:</label>
+
+                        <span>Кожен <input type="number" min="1" max="4" name="everyweek"/> тиждень</span>
+                    </div>
+                </div>
+
+                <div id="everymonth">
+                    <div>
+                        <label>
+                            В який день повторювати
+                        </label>
+
+                        <input type="number" min="1" max="12" name="repeated_at" />
+                    </div>
+
+                    <div>
+                        <label>
+                            Частота повторення в місяцях:
+                        </label>
+
+                        <span>Кожен <input type="number" min="1" max="12" name="everymonth"/> місяць</span>
+                    </div>
+                </div>
+
+                <div id='exception'>
+                    <div>
+                        <label>
+                            Початкова дата події яку треба замінити
+                        </label>
+
+                        <input type="date" name="event_replace_date_start" />
+                    </div>
+
+                    <div>
+                        <label>
+                            Кінцева дата події яку треба замінити
+                        </label>
+
+                        <input type="date" name="event_replace_date_end" />
+                    </div>
+
+                    <div>
+                        <label>
+                            Початковий час який треба замінити
+                        </label>
+
+                        <input type="time" name="event_replace_time_start" />
+                    </div>
+
+                    <div>
+                        <label>
+                            Кінцевий час який треба замінити
+                        </label>
+
+                        <input type="time" name="event_replace_time_end" />
+                    </div>
+
+                    <div>
+                        <label>Яку подію треба замінити</label>
+                        <select id="parent_event">
+                            {% for event in events %}
+                                <option value="{{ event.event_code }}">{{ event.event_code }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
             </div>
 
             <div>
@@ -22,4 +159,13 @@
             </div>
         </form>
     </div>
+{% endblock %}
+
+{% block js %}
+    <script src="../../assets/js/jquery.min.js"></script>
+    <script src="../../assets/js/app.js"></script>
+{% endblock %}
+
+{% block css %}
+    <link rel="stylesheet" href="../../assets/css/own.css">
 {% endblock %}

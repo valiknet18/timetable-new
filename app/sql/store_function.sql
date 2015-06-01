@@ -49,20 +49,3 @@ SELECT all events in day that in interval
   if everymonth >
       if target day == repeatedat and current_month % everymonth > insert into lessons
 */
-
-DROP FUNCTION insert_in_event_everyday();
-
-CREATE OR REPLACE FUNCTION insert_in_event_everyday(data_event_date_start date, data_event_date_end date, data_event_time_start time, data_event_time_end time, data_event_type INTEGER, data_teacher_code INTEGER, data_subject_code integer, data_auditory_number integer, data_everyday small_int_not_null_domain)
-    RETURNS void AS $$
-
-BEGIN
-  WITH events_event_code AS (
-    INSERT INTO events (event_date_start, event_date_end, event_time_start, event_time_end, event_type, teacher_code, subject_code, auditory_number)
-    VALUES (data_event_date_start, data_event_date_end, data_event_time_start, data_event_time_end, data_event_type, data_teacher_code, data_subject_code, data_auditory_number) RETURNING event_code
-  )
-  UPDATE everyday SET everyday."everyday" = data_everyday
-    FROM events_event_code
-  WHERE everyday."event_code" = events_event_code.event_code;
-END; $$
-LANGUAGE PLPGSQL
-

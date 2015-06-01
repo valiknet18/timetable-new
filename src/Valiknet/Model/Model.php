@@ -32,8 +32,13 @@ class Model implements InterfaceModel
 
     public static function findOne($sql, $parameter = null)
     {
-        $findOne = self::getStaticPdo()->prepare($sql);
-        $findOne->execute(array($parameter));
+        if (is_array($parameter)) {
+            $findOne = self::getStaticPdo()->prepare($sql);
+            $findOne->execute(array($parameter));
+        } else {
+            $findOne = self::getStaticPdo()->prepare($sql);
+            $findOne->execute(array($parameter));
+        }
 
         return $findOne->fetch();
     }

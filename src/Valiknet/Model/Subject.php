@@ -90,8 +90,27 @@ class Subject extends Model implements InterfaceObject
 
     public function create()
     {
-        $sql = "INSERT INTO auditories(auditory_number, auditory_type) VALUES(?, ?)";
-        $create = $this->getPdo()->prepare($sql);
-        $create->execute(array($this->auditory_number, $this->auditory_type));
+        $this->getPdo()->beginTransaction();
+
+        try {
+            $sql = "INSERT INTO subjects(subject_name) VALUES(?)";
+
+            $create = $this->getPdo()->prepare($sql);
+            $create->execute(array($this->subject_name));
+
+            $lastIndex = $this->getPdo()->lastInsertId('subjects_subject_code_seq');
+
+            foreach ($this->teachers as $teacher) {
+                $sql = "INSERT INTO teacher_subject(teacher_code, subject_code) VALUES(?, ?)";
+
+                $create = $this->getPdo()->prepare($sql);
+                $create->execute(array($teacher->teacher_code, $lastIndex));
+            }
+
+            $this->getPdo()->commit();
+
+        } catch (\PDOException $pdo) {
+            $this->getPdo()->rollBack();
+        }
     }
 }

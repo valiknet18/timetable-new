@@ -65,7 +65,12 @@ class Teacher extends Model implements InterfaceObject
 
     public static function findOneBy($pair)
     {
-        $sql = "SELECT * FROM teachers WHERE teachers.teacher_code = ?";
+        if (is_array($pair)) {
+            $sql = "SELECT * FROM teachers WHERE ? = ?";
+        } else {
+            $sql = "SELECT * FROM teachers WHERE teachers.teacher_code = ?";
+        }
+
         $data = self::findOne($sql, $pair);
 
         $teacher = new Teacher();
@@ -104,8 +109,26 @@ class Teacher extends Model implements InterfaceObject
 
     public function create()
     {
-        $sql = "INSERT INTO auditories(auditory_number, auditory_type) VALUES(?, ?)";
-        $create = $this->getPdo()->prepare($sql);
-        $create->execute(array($this->auditory_number, $this->auditory_type));
+        $this->getPdo()->beginTransaction();
+
+        try {
+            $sql = "INSERT INTO teachers(teacher_name, teacher_surname, teacher_last_name, teacher_phone)  VALUES(?, ?, ?, ?)";
+
+            $createTeacher = $this->getPdo()->prepare($sql);
+            $createTeacher->execute(array($this->teacher_name, $this->teacher_surname, $this->teacher_last_name, $this->teacher_phone));
+
+            $lastIndex = $this->getPdo()->lastInsertId('teachers_teacher_code_seq');
+
+            foreach ($this->subjects as $subject) {
+                $sql = "INSERT INTO teacher_subject(teacher_code, subject_code)  VALUES(?, ?)";
+
+                $createEventGroup = $this->getPdo()->prepare($sql);
+                $createEventGroup->execute(array($lastIndex, $subject->subject_code));
+            }
+
+            $this->getPdo()->commit();
+        } catch(\PDOException $pdo) {
+            $this->getPdo()->rollback();
+        }
     }
 }

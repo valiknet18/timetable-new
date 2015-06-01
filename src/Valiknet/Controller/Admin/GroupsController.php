@@ -4,6 +4,7 @@ namespace Valiknet\Controller\Admin;
 
 use Silex\Application;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Valiknet\Controller\AbstractController;
 use Valiknet\Model\Group;
 use Valiknet\Model\Model;
@@ -36,5 +37,12 @@ class GroupsController extends AbstractController
         $group->create();
 
         return $app->redirect($app['url_generator']->generate('list_groups_admin'));
+    }
+
+    public function getAction(Application $app, Request $request)
+    {
+        $groups = Group::findBy($request->query->get('group_course'));
+
+        return new Response(json_encode($groups), 200, ['Content-type' => 'application/json']);
     }
 }
