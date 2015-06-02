@@ -28,9 +28,18 @@ class Exception extends Event
 
     /**
      * @typeProperty('object')
+     * @nameForeignKey('parent_event')
      * @typeObject('Valiknet\Model\Event')
      */
     public $parent_event;
+
+    public function parent_event($event_code)
+    {
+        $sql = "SELECT * FROM events WHERE event_code = ?";
+        $event = self::findOne($sql, $event_code);
+
+        return $event;
+    }
 
     public function save()
     {
@@ -52,11 +61,11 @@ class Exception extends Event
         $this->getPdo()->beginTransaction();
 
         try {
-            $sql = "INSERT INTO events(event_date_start, event_date_end, event_time_start, event_time_end, event_type, teacher_code, subject_code, auditory_number, repeat_type) VALUE(?, ?, ?, ?, ?, ?, ?, ?)";
+            $sql = "INSERT INTO events(event_date_start, event_date_end, event_time_start, event_time_end, event_type, teacher_code, subject_code, auditory_number, repeat_type) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?)";
             $insertInEvents = $this->getPdo()->prepare($sql);
-            $insertInEvents->execute(array($this->event_time_start, $this->event_date_end, $this->event_time_start, $this->event_time_end, $this->event_type, $this->teacher->teacher_code, $this->subject->subject_code, $this->auditory->auditory_number, $this->repeat_type));
+            $insertInEvents->execute(array($this->event_date_start, $this->event_date_end, $this->event_time_start, $this->event_time_end, $this->event_type, $this->teacher->teacher_code, $this->subject->subject_code, $this->auditory->auditory_number, $this->repeat_type));
 
-            $lastIndex = $this->getPdo()->lastInsertId();
+            $lastIndex = $this->getPdo()->lastInsertId('events_event_code_seq');
 
             foreach ($this->groups as $group) {
                 $sql = "INSERT INTO event_group(event_code, group_code) VALUES(?, ?)";
@@ -64,10 +73,10 @@ class Exception extends Event
                 $insertInEventGroup->execute(array($lastIndex, $group->group_code));
             }
 
-            $sql = "INSERT INTO exceptions(event_replace_date_start, event_replace_date_end, event_replace_time_start, event_replace_time_end, event_code) VALUES(?, ?, ?, ?, ?)";
+            $sql = "INSERT INTO exceptions(event_replace_date_start, event_replace_date_end, event_replace_time_start, event_replace_time_end, event_code, parent_event) VALUES(?, ?, ?, ?, ?, ?)";
 
             $insertInEveryday = $this->getPdo()->prepare($sql);
-            $insertInEveryday->execute(array($this->event_replace_date_start, $this->event_replace_date_end, $this->event_replace_time_start, $this->event_replace_time_end, $lastIndex));
+            $insertInEveryday->execute(array($this->event_replace_date_start, $this->event_replace_date_end, $this->event_replace_time_start, $this->event_replace_time_end, $lastIndex, $this->parent_event->event_code));
 
             $this->getPdo()->commit();
         } catch (\PDOException $pdo) {
@@ -84,6 +93,15 @@ class Exception extends Event
         $this->event_type = $request->request->get('event_type');
 
         $this->repeat_type = 5;
+
+        $this->teacher = Teacher::findOneBy($request->request->get('teacher'));
+        $this->subject = Subject::findOneBy($request->request->get('subject'));
+
+        foreach ($request->request->get('groups') as $group) {
+            $this->groups[] = Group::findOneBy($group);
+        }
+
+        $this->auditory = Auditory::findOneBy($request->request->get('auditory'));
 
         $this->event_replace_date_start = $request->request->get('event_replace_date_start');
         $this->event_replace_date_end = $request->request->get('event_replace_date_end');

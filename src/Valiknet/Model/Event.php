@@ -111,7 +111,7 @@ class Event extends Model implements InterfaceObject
 
     }
 
-    public static function findBy($pair = null, $full = false)
+    public static function findBy($pair = null, $full = false, $timestamp = null)
     {
         if ($pair) {
             $sql = "SELECT * FROM events WHERE repeat_type = ?";
@@ -126,57 +126,8 @@ class Event extends Model implements InterfaceObject
         $result  = [];
 
         foreach ($events as $value) {
-            switch ($value['repeat_type']) {
-                case 1:
 
-                    $event = new Event();
-
-                    break;
-
-                case 2:
-                    $sql = "SELECT * FROM everyday WHERE event_code = ? LIMIT 1";
-                    $everyday = self::findOne($sql, $value['event_code']);
-
-                    unset($everyday['event_code']);
-
-                    $value = array_merge($value, $everyday);
-                    $event = new Everyday();
-
-                    break;
-
-                case 3:
-                    $sql = "SELECT * FROM everyweek WHERE event_code = ? LIMIT 1";
-                    $everyweek = self::findOne($sql, $value['event_code']);
-
-                    unset($everyweek['event_code']);
-
-                    $value = array_merge($value, $everyweek);
-                    $event = new Everyweek();
-
-                    break;
-
-                case 4:
-                    $sql = "SELECT * FROM everymonth WHERE event_code = ? LIMIT 1";
-                    $everymonth = self::findOne($sql, $value['event_code']);
-
-                    unset($everymonth['event_code']);
-
-                    $value = array_merge($value, $everymonth);
-                    $event = new Everymonth();
-
-                    break;
-
-                case 5:
-                    $sql = "SELECT * FROM exeptions WHERE event_code = ? LIMIT 1";
-                    $exeptions = self::findOne($sql, $value['event_code']);
-
-                    unset($exeptions['event_code']);
-
-                    $value = array_merge($value, $exeptions);
-                    $event = new Exception();
-
-                    break;
-            }
+            list($event, $value) = self::getEventType($value);
 
             $event->mappedObject($value);
 
@@ -184,7 +135,7 @@ class Event extends Model implements InterfaceObject
         }
 
         if ($full) {
-            $result = self::proccessEvents($result);
+            $result = self::proccessEvents($result, $timestamp);
         }
 
         return $result;
@@ -195,7 +146,8 @@ class Event extends Model implements InterfaceObject
         $sql = "SELECT * FROM events WHERE event_code = ?";
         $data = self::findOne($sql, $pair);
 
-        $event = new Event();
+        list($event, $data) = self::getEventType($data);
+
         $event->mappedObject($data);
 
         return $event;
@@ -235,14 +187,16 @@ class Event extends Model implements InterfaceObject
         $this->repeat_type = 1;
     }
 
-    public static function proccessEvents($events)
+    private static function proccessEvents($events, $timestamp)
     {
-        $date = time();
-        $date_now = (new \DateTime())->setTimestamp($date)->format('Y-m-d');
-        $date = getdate($date);
+        $date_now = (new \DateTime())->setTimestamp($timestamp)->format('Y-m-d');
+
+        $date = getdate($timestamp);
 
         $result = [];
         $exceptions = [];
+
+        $date['wday'] = ($date['wday'] == 0)?7:$date['wday'];
 
         foreach ($events as $event) {
             if (in_array($event->event_code, $exceptions)) {
@@ -251,43 +205,41 @@ class Event extends Model implements InterfaceObject
 
             switch ($event->repeat_type) {
                 case 1:
-                    if (($event->event_date_start <= $date_now && $date_now <= $event->event_date_end)) {
+                    if (($event->event_date_start <= $date_now) && ($date_now <= $event->event_date_end)) {
                         $result[] = $event;
                     }
                     break;
 
                 case 2:
-                    if ((($date['wday'] + 1) % $event->everyday == 0) && ($event->event_date_start <= $date_now && $date_now <= $event->event_date_end)) {
+                    if (($date['wday'] % $event->everyday == 0) && ($event->event_date_start <= $date_now && $date_now <= $event->event_date_end)) {
                         $result[] = $event;
                     }
                     break;
 
                 case 3:
-                    $date['wday'] = ($date['wday'] == 0)?7:$date['wday'];
-
                     $week = (int) date("W",strtotime("2015-06-12"));
-
                     $day = (bool) substr($event->everyday, (($date['wday']) * -1), 1);
-                    if ($day && ($week % $event->everyweek == 0)) {
+
+                    if ($day && (($week % $event->everyweek) == 0) && ($event->event_date_start <= $date_now && $date_now <= $event->event_date_end)) {
                         $result[] = $event;
                     }
                     break;
 
                 case 4:
-                    if ($event->repeat_type == $date['mday'] && ($date['mon'] % $event->everymonth) == 0) {
+                    if (($event->repeat_type == $date['mday']) && (($date['mon'] % $event->everymonth) == 0) && ($event->event_date_start <= $date_now && $date_now <= $event->event_date_end)) {
                         $result[] = $event;
                     }
                     break;
 
                 case 5:
                     if ($event->event_replace_date_start <= $date_now && $date_now <= $event->event_replace_date_end && $event->event_date_start <= $date_now && $date_now <= $event->event_date_end) {
-                        $parent_code = $event->parent_code;
+                        $parent_code = $event->parent_event->event_code;
 
-                        array_filter($result, function ($event) use ($parent_code) {
-                            if ($event->event_code == $parent_code) {
-                                unset($event);
+                        foreach ($result as $key => $event_local) {
+                            if ($event_local->event_code == $parent_code) {
+                                unset($result[$key]);
                             }
-                        });
+                        }
 
                         $exceptions[] = $parent_code;
 
@@ -298,5 +250,62 @@ class Event extends Model implements InterfaceObject
         }
 
         return $result;
+    }
+
+    private static function getEventType($value)
+    {
+        switch ($value['repeat_type']) {
+            case 1:
+
+                $event = new Event();
+
+                break;
+
+            case 2:
+                $sql = "SELECT * FROM everyday WHERE event_code = ? LIMIT 1";
+                $everyday = self::findOne($sql, $value['event_code']);
+
+                unset($everyday['event_code']);
+
+                $value = array_merge($value, $everyday);
+                $event = new Everyday();
+
+                break;
+
+            case 3:
+                $sql = "SELECT * FROM everyweek WHERE event_code = ? LIMIT 1";
+                $everyweek = self::findOne($sql, $value['event_code']);
+
+                unset($everyweek['event_code']);
+
+                $value = array_merge($value, $everyweek);
+                $event = new Everyweek();
+
+                break;
+
+            case 4:
+                $sql = "SELECT * FROM everymonth WHERE event_code = ? LIMIT 1";
+                $everymonth = self::findOne($sql, $value['event_code']);
+
+                unset($everymonth['event_code']);
+
+                $value = array_merge($value, $everymonth);
+                $event = new Everymonth();
+
+                break;
+
+            case 5:
+                $sql = "SELECT * FROM exceptions WHERE event_code = ? LIMIT 1";
+                $exeptions = self::findOne($sql, $value['event_code']);
+
+                unset($exeptions['event_code']);
+
+                $value = array_merge($value, $exeptions);
+                $event = new Exception();
+
+                break;
+        }
+
+        return [$event, $value];
     }
 }

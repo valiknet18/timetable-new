@@ -82,7 +82,7 @@ class Model implements InterfaceModel
                         break;
 
                     case "arrayOfObjects":
-                        if ($depth < 2) {
+                        if ($depth < 1) {
                             preg_match_all('#@typeObject\(\'(.*?)\'\)\n#s', $doc_block, $nameObject);
 
                             $objectData = $this->{$property->getName()}();
@@ -94,7 +94,7 @@ class Model implements InterfaceModel
                         break;
 
                     case "object":
-                        if ($depth < 2) {
+                        if ($depth < 1) {
                             preg_match_all('#@typeObject\(\'(.*?)\'\)\n#s', $doc_block, $nameObject);
                             preg_match_all('#@nameForeignKey\(\'(.*?)\'\)\n#s', $doc_block, $foreignKey);
 
@@ -126,5 +126,10 @@ class Model implements InterfaceModel
         }
 
         return $objects;
+    }
+
+    public function __destruct()
+    {
+//        unset($this->pdo);
     }
 }

@@ -2,6 +2,12 @@
 
 //Events
 $app->get('/', 'Valiknet\Controller\EventsController::indexAction');
+$app->get('/event/{timestamp}/date', 'Valiknet\Controller\EventsController::indexAction')
+->bind('change_date_link');
+
+$app->get('/events/{event_code}', 'Valiknet\Controller\EventsController::viewAction')
+->bind('view_event_client');
+
 
 //Groups
 $app->get('/groups', 'Valiknet\Controller\GroupsController::indexAction');
@@ -26,8 +32,12 @@ $app->get('/teachers/{teacher_code}', 'Valiknet\Controller\TeachersController::v
 //Admin
 
 //Events
-$app->get('/admin', 'Valiknet\Controller\Admin\EventsController::indexAction');
-$app->get('/admin/events/{event_code}', 'Valiknet\Controller\Admin\EventsController::indexAction');
+$app->get('/admin', 'Valiknet\Controller\Admin\EventsController::indexAction')
+    ->bind('list_events_admin');
+$app->get('/admin/event/{timestamp}/date', 'Valiknet\Controller\Admin\EventsController::indexAction')
+    ->bind('change_date_link_admin');
+
+//$app->get('/admin/events/{event_code}', 'Valiknet\Controller\Admin\EventsController::indexAction');
 $app->get('/admin/events/create', 'Valiknet\Controller\Admin\EventsController::createAction')
     ->bind('create_events');
 $app->post('/admin/events/story', 'Valiknet\Controller\Admin\EventsController::storeAction')

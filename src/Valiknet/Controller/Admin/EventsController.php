@@ -15,11 +15,30 @@ use Valiknet\Model\Teacher;
 
 class EventsController extends AbstractController
 {
-    public function indexAction(Application $app, Request $request)
+    public function indexAction(Application $app, Request $request, $timestamp = null)
     {
-        $events = Event::findBy(null, true);
+        if ($timestamp) {
+            $date = new \DateTime();
+            $date->setTimestamp($timestamp);
+        } else {
+            $date = new \DateTime();
+            $timestamp = $date->getTimestamp();
+        }
 
-        return $app['twig']->render('admin/events/index.html.twig', ['events' => $events]);
+        $timestamps = [];
+        $timestamps['current'] = $date->format('d-m-Y');
+
+        $prevday = clone($date);
+        $prevday->modify('-1 day');
+        $timestamps['prevday'] = $prevday->getTimestamp();
+
+        $nextday = clone ($date);
+        $nextday->modify('+1 day');
+        $timestamps['nextday'] = $nextday->getTimestamp();
+
+        $events = Event::findBy(null, true, $timestamp);
+
+        return $app['twig']->render('admin/events/index.html.twig', ['events' => $events, 'timestamps' => $timestamps]);
     }
 
     public function createAction(Application $app, Request $request)
@@ -84,7 +103,7 @@ class EventsController extends AbstractController
                 break;
         }
 
-//        return $app->redirect($app['url_generator']->generate('list_groups_admin'));
+        return $app->redirect($app['url_generator']->generate('list_events_admin'));
     }
 
     public function getAction(Application $app, Request $request)
