@@ -2,93 +2,126 @@
 
 {% block content %}
     <div>
-        <form action="{{ path('story_event') }}" method="POST">
-            <div>
-                <label for="event_date_start">Дата початку події</label>
-                <input type="date" name="event_date_start" id="event_date_start" />
+        <div>
+            <h3 align="center">Створення нової події</h3>
+        </div>
+        <form action="{{ path('story_event') }}" method="POST" class="form-horizontal">
+            <div class="form-group">
+                <label for="event_date_start" class="col-sm-2 control-label">Дата початку події</label>
+
+                <div class="col-sm-9">
+                    <input type="date" class="form-control" name="event_date_start" id="event_date_start" />
+                </div>
             </div>
 
-            <div>
-                <label for="event_date_end">Дата кінця події</label>
-                <input type="date" name="event_date_end" id="event_date_end" />
+            <div class="form-group">
+                <label for="event_date_end" class="col-sm-2 control-label">Дата кінця події</label>
+
+                <div class="col-sm-9">
+                    <input type="date" class="form-control" name="event_date_end" id="event_date_end" />
+                </div>
             </div>
 
-            <div>
-                <label for="event_time_start">Час початку події</label>
-                <input type="time" name="event_time_start" id="event_time_start" />
+            <div class="form-group">
+                <label for="event_time_start" class="col-sm-2 control-label">Час початку події</label>
+
+                <div class="col-sm-9">
+                    <input type="time" class="form-control" name="event_time_start" id="event_time_start" />
+                </div>
             </div>
 
-            <div>
-                <label for="event_time_end">Час кінця події</label>
-                <input type="time" name="event_time_end" id="event_time_end" />
+            <div class="form-group">
+                <label for="event_time_end" class="col-sm-2 control-label">Час кінця події</label>
+
+                <div class="col-sm-9">
+                    <input type="time" class="form-control" name="event_time_end" id="event_time_end" />
+                </div>
             </div>
 
-            <div>
-                <label>Викладач</label>
-                <select id="teacher" name="teacher">
-                    {% for teacher in teachers %}
-                        <option value="{{ teacher.teacher_code }}">{{ teacher.teacher_surname }} {{ teacher.teacher_name }} {{ teacher.teacher_last_name }}</option>
-                    {% endfor %}
-                </select>
+            <div class="form-group">
+                <label form="teacher" class="col-sm-2 control-label">Викладач</label>
+
+                <div class="col-sm-9">
+                    <select id="teacher" name="teacher" class="form-control">
+                        {% for teacher in teachers %}
+                            <option value="{{ teacher.teacher_code }}">{{ teacher.teacher_surname }} {{ teacher.teacher_name }} {{ teacher.teacher_last_name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
             </div>
 
-            <div>
-                <label>Рік вступу</label>
-                <input type="number" min="2000" max="2015" name="group_course" id="group_course"/>
+            <div class="form-group">
+                <label for="group_course" class="col-sm-2 control-label">Рік вступу</label>
+
+                <div class="col-sm-9">
+                    <input type="number" min="2000" max="2015" class="form-control" name="group_course" id="group_course"/>
+                </div>
             </div>
 
-            <div>
-                <label for="event_type">Тип події</label>
-                <select name="event_type" id="event_type">
-                    <option value="1">Лабораторна робота</option>
-                    <option value="2">Лекція</option>
-                    <option value="3">Інше</option>
-                </select>
+            <div class="form-group">
+                <label for="event_type" class="col-sm-2 control-label">Тип події</label>
+
+                <div class="col-sm-9">
+                    <select name="event_type" id="event_type" class="form-control">
+                        <option value="1">Лабораторна робота</option>
+                        <option value="2">Лекція</option>
+                        <option value="3">Інше</option>
+                    </select>
+                </div>
             </div>
 
-            <div>
-                <label for="repeat_type">Тип повторення</label>
-                <select name="repeat_type" id="repeat_type">
-                   <option value="0">Одиночка подія</option>
-                   <option value="1">Кожний день</option>
-                   <option value="2">Кожний тиждень</option>
-                   <option value="3">Кожний місяць</option>
-                   <option value="4">Виключення</option>
-                </select>
+            <div class="form-group">
+                <label for="repeat_type" class="col-sm-2 control-label">Тип повторення</label>
+
+                <div class="col-sm-9">
+                    <select name="repeat_type" id="repeat_type" class="form-control">
+                        <option value="0">Одиночка подія</option>
+                        <option value="1">Кожний день</option>
+                        <option value="2">Кожний тиждень</option>
+                        <option value="3">Кожний місяць</option>
+                        <option value="4">Виключення</option>
+                    </select>
+                </div>
             </div>
 
             <div id="repeat_area">
                 <div id="everyday">
-                    <div>
-                        <label>
+                    <div class="form-group">
+                        <label for="everyday" class="control-label col-sm-2">
                             Частота повторення в днях
                         </label>
 
-                        <span>Кожен <input type="number" min="1" max="6" name="everyday" /> день</span>
+                        <div class="col-sm-8">
+                            <span>Кожен <input type="number" min="1" max="6" name="everyday" id="everyday" class="form-control" /> день</span>
+                        </div>
                     </div>
                 </div>
 
                 <div id="everyweek">
-                    <div>
-                        <label>
+                    <div class="form-group">
+                        <label for="everyday" class="control-label col-sm-2">
                             В які дні повторювати
                         </label>
 
-                        <select name="everyday[]" multiple>
-                            <option value="0">Понеділок</option>
-                            <option value="1">Вівторок</option>
-                            <option value="2">Середа</option>
-                            <option value="3">Четвер</option>
-                            <option value="4">Пятниця</option>
-                            <option value="5">Субота</option>
-                            <option value="6">Неділя</option>
-                        </select>
+                        <div class="col-sm-9">
+                            <select name="everyday[]" class="form-control" id="everyday" multiple>
+                                <option value="0">Понеділок</option>
+                                <option value="1">Вівторок</option>
+                                <option value="2">Середа</option>
+                                <option value="3">Четвер</option>
+                                <option value="4">Пятниця</option>
+                                <option value="5">Субота</option>
+                                <option value="6">Неділя</option>
+                            </select>
+                        </div>
                     </div>
 
-                    <div>
-                        <label>Частота повторення в тижнях:</label>
+                    <div class="form-control">
+                        <label for="everyweek" class="control-label col-sm-2">Частота повторення в тижнях:</label>
 
-                        <span>Кожен <input type="number" min="1" max="4" name="everyweek"/> тиждень</span>
+                        <div class="col-sm-9">
+                            <span>Кожен <input type="number" min="1" max="4" class="form-control" id="everyweek" name="everyweek" /> тиждень</span>
+                        </div>
                     </div>
                 </div>
 
@@ -143,9 +176,9 @@
                         <input type="time" name="event_replace_time_end" />
                     </div>
 
-                    <div>
+                    <div class="form-group">
                         <label>Яку подію треба замінити</label>
-                        <select id="parent_event">
+                        <select id="parent_event" name="parent_event">
                             {% for event in events %}
                                 <option value="{{ event.event_code }}">{{ event.event_code }}</option>
                             {% endfor %}

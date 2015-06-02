@@ -3,16 +3,15 @@
 {% block content %}
 <div>
     <div>
-        <a href="{{ path('create_events') }}">Додати подію</a>
+        <a href="{{ path('create_events') }}" class="btn btn-primary">Додати подію</a>
     </div>
 
     <h3>
-        <span>Розклад зайнять на 06.05.2015</span>
-        {% if date() < '06.05.2015' %}
-        <a href="">Назад</a>
-        {% endif %}
+        <a href="{{ path('change_date_link_admin', {'timestamp' : timestamps.prevday}) }}"><span class="glyphicon glyphicon-chevron-left"></span></a>
 
-        <a href="">Вперед</a>
+        <span>{{ timestamps.current }}</span>
+
+        <a href="{{ path('change_date_link_admin', {'timestamp' : timestamps.nextday}) }}"><span class="glyphicon glyphicon-chevron-right"></span></a>
     </h3>
 
     <table class="table table-striped">
@@ -31,7 +30,7 @@
 
         {% for event in events %}
             <tr>
-                <td>{{ event.event_code }}</td>
+                <td><a href="{{ path('view_event_client', {'event_code' : event.event_code}) }}">{{ event.event_code }}</a></td>
                 <td>{{ event.event_time_start }}</td>
                 <td>{{ event.event_time_end }}</td>
                 <td><a href="{{ path('view_auditory_client', {'auditory_number' : event.auditory.auditory_number}) }}">{{ event.auditory.auditory_number }}</a></td>

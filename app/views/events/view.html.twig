@@ -1,0 +1,75 @@
+{% extends 'app.html.twig' %}
+
+{% block content %}
+    <div>
+        <div>
+            Номер події: {{ event.event_code }}
+        </div>
+
+        <div>
+            Дата початку події: {{ event.event_date_start }}
+        </div>
+
+        <div>
+            Дата кінця події: {{ event.event_date_end }}
+        </div>
+
+        <div>
+            Час початку події: {{ event.event_time_start }}
+        </div>
+
+        <div>
+            Час кінця події: {{ event.event_time_end }}
+        </div>
+
+        <div>
+            Тип повторення:
+            {% if (event.repeat_type == 1) %}
+                Одиночна подія
+            {% elseif (event.repeat_type == 2) %}
+                Денне повторення
+            {% elseif (event.repeat_type == 3) %}
+                Тижневе повторення
+            {% elseif (event.repeat_type == 4) %}
+                Місячне повторення
+            {% else %}
+                Виключення
+            {% endif %}
+        </div>
+
+        <div>
+            Частота повторення:
+            {% if (event.repeat_type == 1) %}
+                Без повторення
+            {% elseif (event.repeat_type == 2) %}
+                Повторюється кожні {{ event.everyday }} дня
+            {% elseif (event.repeat_type == 3) %}
+                Повторюється кожний {{ event.everyweek }} тиждень
+            {% elseif (event.repeat_type == 4) %}
+                Повторюється {{ event.repeat_at }} числа кожний {{ event.everymonth }} місяць
+            {% else %}
+                Виключає подію: {{ event.parent_event }}
+                Дата початку події яка виключається:
+                Дата кінця події яка виключаєсять:
+                Час початку виключення:
+                Час кінця виключення:
+            {% endif %}
+        </div>
+
+        <div>
+            Викладач: <a href="{{ path('view_teacher_client', {'teacher_code' : event.teacher.teacher_code}) }}">{{ event.teacher.teacher_surname }} {{ event.teacher.teacher_name }} {{ event.teacher.teacher_surname }}</a>
+        </div>
+
+        <div>
+            Аудиторія: <a href="{{ path('view_auditory_client', {'auditory_number' : event.auditory.auditory_number}) }}">{{ event.auditory.auditory_number }}</a>
+        </div>
+
+        <div>
+            Предмет: <a href="{{ path('view_subject_client', {'subject_code' : event.subject.subject_code}) }}">{{ event.subject.subject_name }}</a>
+        </div>
+
+        <div>
+            Групи: {% for group in event.groups %} <a href="{{ path('view_group_client', {'group_code' : group.group_code}) }}">{{ group.group_name }}</a> {% endfor %}
+        </div>
+    </div>
+{% endblock %}

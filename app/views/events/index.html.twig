@@ -3,17 +3,17 @@
 {% block content %}
 <div>
     <h3>
-        <span>Розклад зайнять на 06.05.2015</span>
-        {% if date() < '06.05.2015' %}
-        <a href="">Назад</a>
-        {% endif %}
+        <a href="{{ path('change_date_link', {'timestamp' : timestamps.prevday}) }}">Назад</a>
 
-        <a href="">Вперед</a>
+        <span>Розклад зайнять на {{ timestamps.current }}</span>
+
+        <a href="{{ path('change_date_link', {'timestamp' : timestamps.nextday}) }}">Вперед</a>
     </h3>
 
     <table class="table table-striped">
         <thead>
         <tr>
+            <th>Код події</th>
             <th>Дата початку</th>
             <th>Дата кінця</th>
             <th>Аудиторія</th>
@@ -23,24 +23,19 @@
             <th>Тип</th>
         </tr>
         </thead>
-        <tr>
-            <td>08:00</td>
-            <td>09:30</td>
-            <td>130</td>
-            <td>КЕ-12</td>
-            <td>Операційні системи</td>
-            <td>Авраменко В. С.</td>
-            <td>Лабораторна робота</td>
-        </tr>
-        <tr>
-            <td>10:00</td>
-            <td>11:30</td>
-            <td>127</td>
-            <td>КЕ-12</td>
-            <td>Організація БД</td>
-            <td>Яриніч Ю. О.</td>
-            <td>Лабораторна робота</td>
-        </tr>
+
+        {% for event in events %}
+            <tr>
+                <td><a href="{{ path('view_event_client', {'event_code' : event.event_code}) }}">{{ event.event_code }}</a></td>
+                <td>{{ event.event_time_start }}</td>
+                <td>{{ event.event_time_end }}</td>
+                <td><a href="{{ path('view_auditory_client', {'auditory_number' : event.auditory.auditory_number}) }}">{{ event.auditory.auditory_number }}</a></td>
+                <td>{% for group in event.groups %} <a href="{{ path('view_group_client', {'group_code' : group.group_code}) }}">{{ group.group_name }}</a> {% endfor %}</td>
+                <td><a href="{{ path('view_subject_client', {'subject_code' : event.subject.subject_code}) }}">{{ event.subject.subject_name }}</a></td>
+                <td><a href="{{ path('view_teacher_client', {'teacher_code' : event.teacher.teacher_code}) }}">{{ event.teacher.teacher_surname }} {{ event.teacher.teacher_name }}</a></td>
+                <td>{{ event.event_type }}</td>
+            </tr>
+        {% endfor %}
     </table>
 </div>
 {% endblock %}

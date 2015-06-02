@@ -2,33 +2,41 @@
 
 {% block content %}
     <div>
-        <form action="{{ path('story_group') }}" method="POST">
-            <div>
-                <label for="group_name">
+        <form action="{{ path('story_group') }}" method="POST" class="form-horizontal">
+            <div class="form-group">
+                <label for="group_name" class="control-label col-sm-2">
                     Назва групи
                 </label>
-                <div>
-                    <input type="text" id="group_name" name="group_name" />
+
+                <div class="col-sm-9">
+                    <input type="text" id="group_name" name="group_name" class="form-control" />
                 </div>
             </div>
-            <div>
-                <label for="group_name">
+
+            <div class="form-group">
+                <label for="group_name" class="control-label col-sm-2">
                     Рік вступу
                 </label>
-                <div>
-                    <input type="number" id="group_course" name="group_course" min="2000" max="2015" />
+
+                <div class="col-sm-9">
+                    <input type="number" id="group_course" name="group_course" min="2000" max="2015" class="form-control" />
                 </div>
             </div>
-            <div>
-                <label for="group_name">
+
+            <div class="form-group">
+                <label for="group_name" class="control-label col-sm-2">
                     Кількість студентів групи
                 </label>
-                <div>
-                    <input type="text" id="group_students_count" name="group_students_count" />
+
+                <div class="col-sm-9">
+                    <input type="text" id="group_students_count" name="group_students_count" class="form-control"/>
                 </div>
             </div>
-            <div>
-                <button type="Зберегти">Зберегти</button>
+
+            <div class="form-group">
+                <div class="col-sm-offset-2 col-sm-9">
+                    <button class="btn btn-success" type="Зберегти">Зберегти</button>
+                </div>
             </div>
         </form>
     </div>

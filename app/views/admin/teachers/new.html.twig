@@ -3,41 +3,57 @@
 {% block content %}
     <div>
         <div>
-            <form action="{{ path('story_teacher') }}" method="POST">
-                <div>
-                    <label for="teacher_surname">Прізвище викладача</label>
-                    <input type="text" id="teacher_surname" name="teacher_surname">
+            <form action="{{ path('story_teacher') }}" method="POST" class="form-horizontal">
+                <div class="form-group">
+                    <label for="teacher_surname" class="col-sm-2 control-label">Прізвище викладача</label>
+
+                    <div class="col-sm-9">
+                        <input type="text" id="teacher_surname" name="teacher_surname" class="form-control">
+                    </div>
                 </div>
 
-                <div>
-                    <label for="teacher_name">Ім’я викладача</label>
-                    <input type="text" id="teacher_name" name="teacher_name">
+                <div class="form-group">
+                    <label for="teacher_name" class="control-label col-sm-2">Ім’я викладача</label>
+
+                    <div class="col-sm-9">
+                        <input type="text" id="teacher_name" name="teacher_name" class="form-control">
+                    </div>
                 </div>
 
-                <div>
-                    <label for="teacher_last_name">По-батькові викладача</label>
-                    <input type="text" id="teacher_last_name" name="teacher_last_name" />
+                <div class="form-group">
+                    <label for="teacher_last_name" class="control-label col-sm-2">По-батькові викладача</label>
+
+                    <div class="col-sm-9">
+                        <input type="text" id="teacher_last_name" name="teacher_last_name" class="form-control" />
+                    </div>
                 </div>
 
-                <div>
-                    <label for="teacher_phone">Телефон викладача</label>
-                    <input type="text" id="teacher_phone" name="teacher_phone" />
+                <div class="form-group">
+                    <label for="teacher_phone" class="control-label col-sm-2">Телефон викладача</label>
+
+                    <div class="col-sm-9">
+                        <input type="text" id="teacher_phone" name="teacher_phone" class="form-control" />
+                    </div>
                 </div>
 
-                <div>
-                    <label for="subjects">
+                <div class="form-group">
+                    <label for="subjects" class="control-label col-sm-2">
                         Предмети
                     </label>
 
-                    <select multiple="true" name="subjects[]" id="subjects">
-                        {% for subject in subjects %}
-                            <option value="{{ subject.subject_code }}">{{ subject.subject_name }}</option>
-                        {% endfor %}
-                    </select>
+                    <div class="col-sm-9">
+                        <select multiple name="subjects[]" id="subjects" class="form-control">
+                            {% for subject in subjects %}
+                                <option value="{{ subject.subject_code }}">{{ subject.subject_name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
                 </div>
 
-                <div>
-                    <button type="submit">Створити</button>
+                <div class="form-group">
+                    <div class="col-sm-offset-2 col-sm-2">
+                        <button class="btn btn-success" type="submit">Створити</button>
+                    </div>
                 </div>
             </form>
         </div>
