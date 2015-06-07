@@ -79,13 +79,29 @@ class Teacher extends Model implements InterfaceObject
         return $teacher;
     }
 
-    public static function findBy($pair = null)
+    public static function findBy($pair = null, $pagination = null)
     {
         if (count($pair) > 0) {
             $sql = "SELECT * FROM teachers WHERE ? = ?";
+
+            if ($pagination) {
+                $page = " LIMIT %s OFFSET %s";
+                $page = sprintf($page, $pagination['limit'], $pagination['offset']);
+
+                $sql .= $page;
+            }
+
             $teachers = self::find($sql, $pair);
         } else {
             $sql = "SELECT * FROM teachers";
+
+            if ($pagination) {
+                $page = " LIMIT %s OFFSET %s";
+                $page = sprintf($page, $pagination['limit'], $pagination['offset']);
+
+                $sql .= $page;
+            }
+
             $teachers = self::find($sql);
         }
 

@@ -11,9 +11,31 @@ class GroupsController extends AbstractController
 {
     public function indexAction(Application $app, Request $request)
     {
-        $groups = Group::findBy();
+        $count = 10;
 
-        return $app['twig']->render('groups/index.html.twig', ['groups' => $groups]);
+        $page = $request->query->get('page', 1);
+        $offset = ($page - 1) * $count;
+
+        $groups = Group::findBy(null, ['limit' => $count, 'offset' => $offset]);
+
+        $parameters = [
+            'groups' => $groups
+        ];
+
+        if (count($groups) > 0) {
+            $next_page = $page + 1;
+            $prev_page = $page - 1;
+
+            $pagination = [
+                'next_page' => $next_page,
+                'prev_page' => $prev_page,
+                'current_page' => $page
+            ];
+
+            $parameters['pagination'] = $pagination;
+        }
+
+        return $app['twig']->render('groups/index.html.twig', $parameters);
     }
 
     public function viewAction(Application $app, Request $request, $group_code)

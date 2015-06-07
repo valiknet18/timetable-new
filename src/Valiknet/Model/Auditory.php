@@ -53,13 +53,29 @@ class Auditory extends Model implements InterfaceObject
         return $auditory;
     }
 
-    public static function findBy($pair = null)
+    public static function findBy($pair = null, $pagination = null)
     {
         if (count($pair) > 0) {
             $sql = "SELECT * FROM auditories WHERE auditories.auditory_type = ?";
+
+            if ($pagination) {
+                $page = " LIMIT %s OFFSET %s";
+                sprintf($page, $pagination['limit'], $pagination['offset']);
+
+                $sql .= $page;
+            }
+
             $auditories = self::find($sql, $pair);
         } else {
             $sql = "SELECT auditories.* FROM auditories";
+
+            if ($pagination) {
+                $page = " LIMIT %s OFFSET %s";
+                $page = sprintf($page, $pagination['limit'], $pagination['offset']);
+
+                $sql .= $page;
+            }
+
             $auditories = self::find($sql);
         }
 

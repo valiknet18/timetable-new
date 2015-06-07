@@ -57,12 +57,30 @@ class Group extends Model implements InterfaceObject
 
     }
 
-    public static function findBy($pair = null)
+    public static function findBy($pair = null, $pagination = null)
     {
         if (count($pair) > 0) {
-            $groups = self::find('SELECT * FROM groups WHERE groups.group_course = ?', $pair);
+            $sql = 'SELECT * FROM groups WHERE groups.group_course = ?';
+
+            if ($pagination) {
+                $page = " LIMIT %s OFFSET %s";
+                $page = sprintf($page, $pagination['limit'], $pagination['offset']);
+
+                $sql .= $page;
+            }
+
+            $groups = self::find($sql, $pair);
         } else {
-            $groups = self::find('SELECT * FROM groups');
+            $sql = 'SELECT * FROM groups';
+
+            if ($pagination) {
+                $page = " LIMIT %s OFFSET %s";
+                $page = sprintf($page, $pagination['limit'], $pagination['offset']);
+
+                $sql .= $page;
+            }
+
+            $groups = self::find($sql);
         }
 
         $result = [];

@@ -19,7 +19,25 @@
                 {% for teacher in subject.teachers %} <a href="{{ path('view_teacher_client', {'teacher_code' : teacher.teacher_code}) }}">{{ teacher.teacher_surname }} {{ teacher.teacher_name }} {{ teacher.teacher_last_name }}</a> {% endfor %}
             </td>
         </tr>
+        {% else %}
+            <tr>
+                <td colspan="2">На цій сторінці немає ні одного предмету</td>
+            </tr>
         {% endfor %}
     </table>
+
+    {% if (pagination is defined) %}
+        <div class="navigation">
+            {% if pagination['prev_page'] >= 1 %}
+                <a href="{{ path('list_subjects_client') }}?page={{ pagination['prev_page'] }}">Попередня сторінка</a>
+            {% endif %}
+            <span>{{ pagination['current_page'] }}</span>
+            <a href="{{ path('list_subjects_client') }}?page={{ pagination['next_page'] }}">Наступна сторінка</a>
+        </div>
+    {% else %}
+        <div class="navigation">
+            <a href="{{ path('list_subjects_client') }}?page=1">Перша сторінка</a>
+        </div>
+    {% endif %}
     </div>
 {% endblock %}

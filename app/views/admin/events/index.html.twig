@@ -18,8 +18,8 @@
         <thead>
         <tr>
             <th>Код події</th>
-            <th>Дата початку</th>
-            <th>Дата кінця</th>
+            <th>Час початку</th>
+            <th>Час кінця</th>
             <th>Аудиторія</th>
             <th>Група(и)</th>
             <th>Предмет</th>
@@ -39,7 +39,25 @@
                 <td><a href="{{ path('view_teacher_client', {'teacher_code' : event.teacher.teacher_code}) }}">{{ event.teacher.teacher_surname }} {{ event.teacher.teacher_name }}</a></td>
                 <td>{{ event.event_type }}</td>
             </tr>
+        {% else %}
+            <tr>
+                <td colspan="2">На цій сторінці немає ні однієї події</td>
+            </tr>
         {% endfor %}
     </table>
+
+    {% if (pagination is defined) %}
+        <div class="navigation">
+            {% if pagination['prev_page'] >= 1 %}
+                <a href="{{ path('list_events_admin') }}?page={{ pagination['prev_page'] }}">Попередня сторінка</a>
+            {% endif %}
+            <span>{{ pagination['current_page'] }}</span>
+            <a href="{{ path('list_events_admin') }}?page={{ pagination['next_page'] }}">Наступна сторінка</a>
+        </div>
+    {% else %}
+        <div class="navigation">
+            <a href="{{ path('list_events_admin') }}?page=1">Перша сторінка</a>
+        </div>
+    {% endif %}
 </div>
 {% endblock %}

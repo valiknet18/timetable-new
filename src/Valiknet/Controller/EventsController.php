@@ -10,6 +10,11 @@ class EventsController extends AbstractController
 {
     public function indexAction(Application $app, Request $request, $timestamp = null)
     {
+        $count = 10;
+
+        $page = $request->query->get('page', 1);
+        $offset = ($page - 1) * $count;
+
         if ($timestamp) {
             $date = new \DateTime();
             $date->setTimestamp($timestamp);
@@ -29,9 +34,27 @@ class EventsController extends AbstractController
         $nextday->modify('+1 day');
         $timestamps['nextday'] = $nextday->getTimestamp();
 
-        $events = Event::findBy(null, true, $timestamp);
+        $events = Event::findBy(null, true, $timestamp, ['limit' => $count, 'offset' => $offset]);
 
-        return $app['twig']->render('events/index.html.twig', ['timestamps' => $timestamps, 'events' => $events]);
+        $parameters = [
+            'events' => $events,
+            'timestamps' => $timestamps
+        ];
+
+        if (count($events) > 0) {
+            $next_page = $page + 1;
+            $prev_page = $page - 1;
+
+            $pagination = [
+                'next_page' => $next_page,
+                'prev_page' => $prev_page,
+                'current_page' => $page
+            ];
+
+            $parameters['pagination'] = $pagination;
+        }
+
+        return $app['twig']->render('events/index.html.twig', $parameters);
     }
 
     public function viewAction(Application $app, Request $request, $event_code)

@@ -18,7 +18,27 @@
                     <td>{{ group.group_course }}</td>
                     <td>{{ group.group_students_count }}</td>
                 </tr>
+            {% else %}
+                <tr>
+                    <td colspan="2">
+                        На цій сторінці немає ні однієї групи
+                    </td>
+                </tr>
             {% endfor %}
         </table>
+
+        {% if (pagination is defined) %}
+            <div class="navigation">
+                {% if pagination['prev_page'] >= 1 %}
+                    <a href="{{ path('list_groups_client') }}?page={{ pagination['prev_page'] }}">Попередня сторінка</a>
+                {% endif %}
+                <span>{{ pagination['current_page'] }}</span>
+                <a href="{{ path('list_groups_client') }}?page={{ pagination['next_page'] }}">Наступна сторінка</a>
+            </div>
+        {% else %}
+            <div class="navigation">
+                <a href="{{ path('list_groups_client') }}?page=1">Перша сторінка</a>
+            </div>
+        {% endif %}
     </div>
 {% endblock %}

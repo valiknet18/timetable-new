@@ -111,14 +111,28 @@ class Event extends Model implements InterfaceObject
 
     }
 
-    public static function findBy($pair = null, $full = false, $timestamp = null)
+    public static function findBy($pair = null, $full = false, $timestamp = null, $pagination = null)
     {
         if ($pair) {
             $sql = "SELECT * FROM events WHERE repeat_type = ?";
 
+            if ($pagination) {
+                $page = " LIMIT %s OFFSET %s";
+                $page = sprintf($page, $pagination['limit'], $pagination['offset']);
+
+                $sql .= $page;
+            }
+
             $events = self::find($sql, $pair);
         } else {
             $sql = "SELECT * FROM events";
+
+            if ($pagination) {
+                $page = " LIMIT %s OFFSET %s";
+                $page = sprintf($page, $pagination['limit'], $pagination['offset']);
+
+                $sql .= $page;
+            }
 
             $events = self::find($sql);
         }

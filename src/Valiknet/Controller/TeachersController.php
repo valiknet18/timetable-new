@@ -11,9 +11,31 @@ class TeachersController extends AbstractController
 {
     public function indexAction(Application $app, Request $request)
     {
-        $teachers = Teacher::findBy();
+        $count = 10;
 
-        return $app['twig']->render('teachers/index.html.twig', ['teachers' => $teachers]);
+        $page = $request->query->get('page', 1);
+        $offset = ($page - 1) * $count;
+
+        $teachers = Teacher::findBy(null, ['limit' => $count, 'offset' => $offset]);
+
+        $parameters = [
+            'teachers' => $teachers
+        ];
+
+        if (count($teachers) > 0) {
+            $next_page = $page + 1;
+            $prev_page = $page - 1;
+
+            $pagination = [
+                'next_page' => $next_page,
+                'prev_page' => $prev_page,
+                'current_page' => $page
+            ];
+
+            $parameters['pagination'] = $pagination;
+        }
+
+        return $app['twig']->render('teachers/index.html.twig', $parameters);
     }
 
     public function viewAction(Application $app, Request $request, $teacher_code)

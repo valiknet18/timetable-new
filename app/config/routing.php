@@ -1,7 +1,8 @@
 <?php
 
 //Events
-$app->get('/', 'Valiknet\Controller\EventsController::indexAction');
+$app->get('/', 'Valiknet\Controller\EventsController::indexAction')
+->bind('list_events_client');
 $app->get('/event/{timestamp}/date', 'Valiknet\Controller\EventsController::indexAction')
 ->bind('change_date_link');
 
@@ -10,22 +11,26 @@ $app->get('/events/{event_code}', 'Valiknet\Controller\EventsController::viewAct
 
 
 //Groups
-$app->get('/groups', 'Valiknet\Controller\GroupsController::indexAction');
+$app->get('/groups', 'Valiknet\Controller\GroupsController::indexAction')
+->bind('list_groups_client');
 $app->get('/groups/{group_code}', 'Valiknet\Controller\GroupsController::viewAction')
 ->bind('view_group_client');
 
 //Subject
-$app->get('/subjects', 'Valiknet\Controller\SubjectsController::indexAction');
+$app->get('/subjects', 'Valiknet\Controller\SubjectsController::indexAction')
+->bind('list_subjects_client');
 $app->get('/subjects/{subject_code}', 'Valiknet\Controller\SubjectsController::viewAction')
 ->bind('view_subject_client');
 
 //Auditories
-$app->get('/auditories', 'Valiknet\Controller\AuditoriesController::indexAction');
+$app->get('/auditories', 'Valiknet\Controller\AuditoriesController::indexAction')
+->bind('list_auditories_client');
 $app->get('/auditories/{auditory_number}', 'Valiknet\Controller\AuditoriesController::viewAction')
 ->bind('view_auditory_client');
 
 //Teachers
-$app->get('/teachers', 'Valiknet\Controller\TeachersController::indexAction');
+$app->get('/teachers', 'Valiknet\Controller\TeachersController::indexAction')
+->bind('list_teachers_client');
 $app->get('/teachers/{teacher_code}', 'Valiknet\Controller\TeachersController::viewAction')
 ->bind('view_teacher_client');
 
@@ -42,7 +47,8 @@ $app->get('/admin/events/create', 'Valiknet\Controller\Admin\EventsController::c
     ->bind('create_events');
 $app->post('/admin/events/story', 'Valiknet\Controller\Admin\EventsController::storeAction')
     ->bind('story_event');
-$app->get('admin/events/get', 'Valiknet\Controller\Admin\EventsController::getAction');
+$app->get('admin/events/get', 'Valiknet\Controller\Admin\EventsController::getAction')
+    ->bind('get_event');
 
 //Groups
 $app->get('/admin/groups', 'Valiknet\Controller\Admin\GroupsController::indexAction')

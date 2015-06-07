@@ -21,7 +21,25 @@
                     {{teacher.teacher_phone}}
                 </td>
             </tr>
+            {% else %}
+                <tr>
+                    <td colspan="2">На цій сторінці немає ні одного викладача</td>
+                </tr>
             {% endfor %}
         </table>
+
+        {% if (pagination is defined) %}
+            <div class="navigation">
+                {% if pagination['prev_page'] >= 1 %}
+                    <a href="{{ path('list_teachers_admin') }}?page={{ pagination['prev_page'] }}">Попередня сторінка</a>
+                {% endif %}
+                <span>{{ pagination['current_page'] }}</span>
+                <a href="{{ path('list_teachers_admin') }}?page={{ pagination['next_page'] }}">Наступна сторінка</a>
+            </div>
+        {% else %}
+            <div class="navigation">
+                <a href="{{ path('list_teachers_admin') }}?page=1">Перша сторінка</a>
+            </div>
+        {% endif %}
     </div>
 {% endblock %}

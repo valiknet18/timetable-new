@@ -60,13 +60,29 @@ class Subject extends Model implements InterfaceObject
         return $subject;
     }
 
-    public static function findBy($pair = null)
+    public static function findBy($pair = null, $pagination = null)
     {
         if (count($pair) > 0) {
             $sql = "SELECT * FROM subjects WHERE ? = ?";
+
+            if ($pagination) {
+                $page = " LIMIT %s OFFSET %s";
+                $page = sprintf($page, $pagination['limit'], $pagination['offset']);
+
+                $sql .= $page;
+            }
+
             $subject = self::find($sql, $pair);
         } else {
             $sql = "SELECT * FROM subjects";
+
+            if ($pagination) {
+                $page = " LIMIT %s OFFSET %s";
+                $page = sprintf($page, $pagination['limit'], $pagination['offset']);
+
+                $sql .= $page;
+            }
+
             $subject = self::find($sql);
         }
 
